@@ -1,0 +1,47 @@
+CREATE TABLE drzava (
+    kratica VARCHAR(3)  PRIMARY KEY,
+    ime     TEXT UNIQE
+);
+
+CREATE TABLE olimpijskeIgre (
+    leto   INT         PRIMARY KEY,
+    drzava VARCHAR(3)  REFERENCES drzava(kratica) 
+);
+
+CREATE TABLE disciplina (
+    ime TEXT PRIMARY KEY
+);
+
+CREATE TABLE poddisciplina (
+    ime        TEXT PRIMARY KEY,
+    disciplina TEXT REFERENCES disciplina(ime) 
+);
+
+CREATE TABLE tekmovalec (
+    id     INTEGER     PRIMARY KEY AUTOINCREMENT,
+    ime    TEXT        NOT NULL,
+    rojen  DATE,
+    drzava VARCHAR(3) REFERENCES drzava(kratica) 
+);
+
+CREATE TABLE rezultat (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    leto       INT     NOT NULL REFERENCES olimpijskeIgre(leto),
+    disciplina TEXT    NOT NULL REFERENCES poddisciplina(ime),
+    tekmovalec TEXT    NOT NULL REFERENCES tekmovalec(id),
+    mesto      INT     NOT NULL,
+    rezultat   TEXT    NOT NULL
+);
+
+CREATE TABLE uporabnik (
+    uporabniskoIme TEXT PRIMARY KEY,
+    geslo          TEXT
+);
+
+CREATE TABLE popravi (
+    uporabnik  TEXT REFERENCES uporabnik (uporabniskoIme),
+    tekmovalec TEXT REFERENCES tekmovalec (id),
+    kajNaredi  TEXT NOT NULL,
+    razlog     TEXT NOT NULL
+);
+
