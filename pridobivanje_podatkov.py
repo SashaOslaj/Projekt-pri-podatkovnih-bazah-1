@@ -555,14 +555,13 @@ drzave = []
 
 
 #prenesi_html()
-preberi_podatke()
-print(len(tekmovalci))
+#preberi_podatke()
 #prenesi_html_tekmovalca()
 
 
-zapisi_tekmovalce(tekmovalci)
-preberi_podatke_tekmovalcev()
+#zapisi_tekmovalce(tekmovalci)
+#preberi_podatke_tekmovalcev()
 
-orodja.zapisi_tabelo(rezultati, ['igre', 'disciplina', 'poddisciplina', 'mesto', 'ime', 'drzava', 'rezultat'], 'rezultati.csv')
-orodja.zapisi_tabelo(roj_dan_tekmovalcev, ['ime', 'datum'], 'roj_dan_tekmovalcev.csv')
-orodja.zapisi_tabelo(drzave, ['kratica', 'drzava'], 'seznam_drzav.csv')
+#orodja.zapisi_tabelo(rezultati, ['igre', 'disciplina', 'poddisciplina', 'mesto', 'ime', 'drzava', 'rezultat'], 'rezultati.csv')
+#orodja.zapisi_tabelo(roj_dan_tekmovalcev, ['ime', 'datum'], 'roj_dan_tekmovalcev.csv')
+#orodja.zapisi_tabelo(drzave, ['kratica', 'drzava'], 'seznam_drzav.csv')
