@@ -1,6 +1,7 @@
 import json
-import os
 import sqlite3
+
+# To datoteko pozeni potem, ko pozenes napolni_bazo.py
 
 
 def dodaj_rezultat(conn, id_tekmovalec, rezultati):
