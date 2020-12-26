@@ -21,16 +21,17 @@ CREATE TABLE tekmovalec (
     id     INTEGER     PRIMARY KEY AUTOINCREMENT,
     ime    TEXT        NOT NULL,
     rojen  DATE,
-    drzava VARCHAR(3) REFERENCES drzava(kratica) 
+    drzava     VARCHAR(3) REFERENCES drzava(kratica)
 );
 
 CREATE TABLE rezultat (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    leto       INT     NOT NULL REFERENCES olimpijskeIgre(leto),
-    disciplina TEXT    NOT NULL REFERENCES poddisciplina(ime),
-    tekmovalec TEXT    NOT NULL REFERENCES tekmovalec(id),
-    mesto      INT     NOT NULL,
-    rezultat   TEXT    NOT NULL
+    id         INTEGER    PRIMARY KEY AUTOINCREMENT,
+    leto       INT        NOT NULL REFERENCES olimpijskeIgre(leto),
+    disciplina TEXT       NOT NULL REFERENCES poddisciplina(ime),
+    tekmovalec INT       NOT NULL REFERENCES tekmovalec(id),
+    drzava     VARCHAR(3) REFERENCES drzava(kratica),
+    mesto      INT,
+    rezultat   TEXT
 );
 
 CREATE TABLE uporabnik (

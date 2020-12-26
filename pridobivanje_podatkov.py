@@ -137,7 +137,6 @@ def podatki_posameznik(datoteka, olimpijske, disciplina, poddisciplina):
             rezultati.append(nastop)
             sez.add(tekmovalec.group('ime'))
 
-
 def posameznik_rojstni_dan(datoteka, sportnik):
     '''
     Funkcija sprejme ime datotekein ime tekmovalca in naredi dva seznama.
@@ -167,10 +166,12 @@ def posameznik_rojstni_dan(datoteka, sportnik):
             meseci = {'Jan':'01', 'Feb':'02', 'Mar':'03', 'Apr':'04', 'May':'05', 
                       'Jun':'06', 'Jul':'07', 'Aug':'08', 'Sep':'09', 'Oct':'10', 
                       'Nov':'11', 'Dec':'12'}
-            
+
+            kratica = tekmovalec.group('kratica')
 
             nastopajoci = {}
             nastopajoci['ime'] = ime
+            nastopajoci['drzava'] = kratica
             if '01 Jan 0001' == datum[:11]:
                 nastopajoci['datum'] = ''
             else:
@@ -179,7 +180,6 @@ def posameznik_rojstni_dan(datoteka, sportnik):
                 nastopajoci['datum'] = datum[:2] + '.' + st + '.' + datum[-4:]
             roj_dan_tekmovalcev.append(nastopajoci)
 
-            kratica = tekmovalec.group('kratica')
             drzava = tekmovalec.group('drzava')
             drzava = drzava.replace("-", " ")
             drzava = drzava.title()
@@ -555,13 +555,17 @@ drzave = []
 
 
 #prenesi_html()
-#preberi_podatke()
+preberi_podatke()
 #prenesi_html_tekmovalca()
 
 
-#zapisi_tekmovalce(tekmovalci)
-#preberi_podatke_tekmovalcev()
+zapisi_tekmovalce(tekmovalci)
+preberi_podatke_tekmovalcev()
 
 #orodja.zapisi_tabelo(rezultati, ['igre', 'disciplina', 'poddisciplina', 'mesto', 'ime', 'drzava', 'rezultat'], 'rezultati.csv')
 #orodja.zapisi_tabelo(roj_dan_tekmovalcev, ['ime', 'datum'], 'roj_dan_tekmovalcev.csv')
 #orodja.zapisi_tabelo(drzave, ['kratica', 'drzava'], 'seznam_drzav.csv')
+
+orodja.zapisi_json(rezultati, 'rezultati.json')
+orodja.zapisi_json(roj_dan_tekmovalcev, 'roj_dan_tekmovalcev.json')
+orodja.zapisi_json(drzave, 'drzave.json')

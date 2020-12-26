@@ -2,6 +2,7 @@ import csv
 import os
 import requests
 import sys
+import json
 
 
 def pripravi_imenik(ime_datoteke):
@@ -49,3 +50,9 @@ def zapisi_tabelo(slovarji, imena_polj, ime_datoteke):
         writer.writeheader()
         for slovar in slovarji:
             writer.writerow(slovar)
+
+def zapisi_json(objekt, ime_datoteke):
+    '''Iz danega objekta ustvari JSON datoteko.'''
+    pripravi_imenik(ime_datoteke)
+    with open(ime_datoteke, 'w', encoding='utf-8') as json_datoteka:
+        json.dump(objekt, json_datoteka, indent=4, ensure_ascii=False)

@@ -1,0 +1,486 @@
+[
+    {
+        "kratica": "RUS",
+        "drzava": "Russian Federation"
+    },
+    {
+        "kratica": "POL",
+        "drzava": "Poland"
+    },
+    {
+        "kratica": "EUA",
+        "drzava": "United Team Of Germany 1956 1960 1964"
+    },
+    {
+        "kratica": "AUT",
+        "drzava": "Austria"
+    },
+    {
+        "kratica": "GBR",
+        "drzava": "Great Britain"
+    },
+    {
+        "kratica": "FIN",
+        "drzava": "Finland"
+    },
+    {
+        "kratica": "USA",
+        "drzava": "United States Of America"
+    },
+    {
+        "kratica": "GER",
+        "drzava": "Germany"
+    },
+    {
+        "kratica": "CAN",
+        "drzava": "Canada"
+    },
+    {
+        "kratica": "BLR",
+        "drzava": "Belarus"
+    },
+    {
+        "kratica": "SUI",
+        "drzava": "Switzerland"
+    },
+    {
+        "kratica": "JPN",
+        "drzava": "Japan"
+    },
+    {
+        "kratica": "SWE",
+        "drzava": "Sweden"
+    },
+    {
+        "kratica": "NED",
+        "drzava": "Netherlands"
+    },
+    {
+        "kratica": "NOR",
+        "drzava": "Norway"
+    },
+    {
+        "kratica": "ITA",
+        "drzava": "Italy"
+    },
+    {
+        "kratica": "HUN",
+        "drzava": "Hungary"
+    },
+    {
+        "kratica": "UKR",
+        "drzava": "Ukraine"
+    },
+    {
+        "kratica": "ARG",
+        "drzava": "Argentina"
+    },
+    {
+        "kratica": "URS",
+        "drzava": "Ussr"
+    },
+    {
+        "kratica": "CRO",
+        "drzava": "Croatia"
+    },
+    {
+        "kratica": "KOR",
+        "drzava": "Republic Of Korea"
+    },
+    {
+        "kratica": "ROU",
+        "drzava": "Romania"
+    },
+    {
+        "kratica": "AUS",
+        "drzava": "Australia"
+    },
+    {
+        "kratica": "SLO",
+        "drzava": "Slovenia"
+    },
+    {
+        "kratica": "MDA",
+        "drzava": "Republic Of Moldova"
+    },
+    {
+        "kratica": "FRG",
+        "drzava": "Federal Republic Of Germany 1950 1990 Ger Since"
+    },
+    {
+        "kratica": "FRA",
+        "drzava": "France"
+    },
+    {
+        "kratica": "KAZ",
+        "drzava": "Kazakhstan"
+    },
+    {
+        "kratica": "EUN",
+        "drzava": "Unified Team Ex Ussr In 1992"
+    },
+    {
+        "kratica": "TCH",
+        "drzava": "Czechoslovakia"
+    },
+    {
+        "kratica": "TUR",
+        "drzava": "Turkey"
+    },
+    {
+        "kratica": "MEX",
+        "drzava": "Mexico"
+    },
+    {
+        "kratica": "LAT",
+        "drzava": "Latvia"
+    },
+    {
+        "kratica": "BEL",
+        "drzava": "Belgium"
+    },
+    {
+        "kratica": "OAR",
+        "drzava": "Olympic Athlete From Russia"
+    },
+    {
+        "kratica": "GRE",
+        "drzava": "Greece"
+    },
+    {
+        "kratica": "LTU",
+        "drzava": "Lithuania"
+    },
+    {
+        "kratica": "PRK",
+        "drzava": "Democratic People S Republic Of Korea"
+    },
+    {
+        "kratica": "CHN",
+        "drzava": "People S Republic Of China"
+    },
+    {
+        "kratica": "CZE",
+        "drzava": "Czech Republic"
+    },
+    {
+        "kratica": "EST",
+        "drzava": "Estonia"
+    },
+    {
+        "kratica": "ESP",
+        "drzava": "Spain"
+    },
+    {
+        "kratica": "GDR",
+        "drzava": "German Democratic Republic"
+    },
+    {
+        "kratica": "BUL",
+        "drzava": "Bulgaria"
+    },
+    {
+        "kratica": "AHO",
+        "drzava": "Netherlands Antilles"
+    },
+    {
+        "kratica": "SVK",
+        "drzava": "Slovakia"
+    },
+    {
+        "kratica": "CRC",
+        "drzava": "Costa Rica"
+    },
+    {
+        "kratica": "MAR",
+        "drzava": "Morocco"
+    },
+    {
+        "kratica": "AND",
+        "drzava": "Andorra"
+    },
+    {
+        "kratica": "ISL",
+        "drzava": "Iceland"
+    },
+    {
+        "kratica": "NZL",
+        "drzava": "New Zealand"
+    },
+    {
+        "kratica": "LIE",
+        "drzava": "Liechtenstein"
+    },
+    {
+        "kratica": "IRL",
+        "drzava": "Ireland"
+    },
+    {
+        "kratica": "IRI",
+        "drzava": "Islamic Republic Of Iran"
+    },
+    {
+        "kratica": "TPE",
+        "drzava": "Chinese Taipei"
+    },
+    {
+        "kratica": "CHI",
+        "drzava": "Chile"
+    },
+    {
+        "kratica": "PUR",
+        "drzava": "Puerto Rico"
+    },
+    {
+        "kratica": "MKD",
+        "drzava": "North Macedonia"
+    },
+    {
+        "kratica": "MGL",
+        "drzava": "Mongolia"
+    },
+    {
+        "kratica": "SCG",
+        "drzava": "Serbia And Montenegro"
+    },
+    {
+        "kratica": "YUG",
+        "drzava": "Yugoslavia"
+    },
+    {
+        "kratica": "DEN",
+        "drzava": "Denmark"
+    },
+    {
+        "kratica": "BRA",
+        "drzava": "Brazil"
+    },
+    {
+        "kratica": "ISV",
+        "drzava": "Virgin Islands Us"
+    },
+    {
+        "kratica": "HKG",
+        "drzava": "Hong Kong China"
+    },
+    {
+        "kratica": "PHI",
+        "drzava": "Philippines"
+    },
+    {
+        "kratica": "SRB",
+        "drzava": "Serbia"
+    },
+    {
+        "kratica": "BOL",
+        "drzava": "Bolivia"
+    },
+    {
+        "kratica": "IND",
+        "drzava": "India"
+    },
+    {
+        "kratica": "ISR",
+        "drzava": "Israel"
+    },
+    {
+        "kratica": "ALG",
+        "drzava": "Algeria"
+    },
+    {
+        "kratica": "POR",
+        "drzava": "Portugal"
+    },
+    {
+        "kratica": "AZE",
+        "drzava": "Azerbaijan"
+    },
+    {
+        "kratica": "LBN",
+        "drzava": "Lebanon"
+    },
+    {
+        "kratica": "ARM",
+        "drzava": "Armenia"
+    },
+    {
+        "kratica": "PAK",
+        "drzava": "Pakistan"
+    },
+    {
+        "kratica": "LIB",
+        "drzava": "Lebanon"
+    },
+    {
+        "kratica": "CYP",
+        "drzava": "Cyprus"
+    },
+    {
+        "kratica": "GUA",
+        "drzava": "Guatemala"
+    },
+    {
+        "kratica": "TGA",
+        "drzava": "Tonga"
+    },
+    {
+        "kratica": "BIH",
+        "drzava": "Bosnia And Herzegovina"
+    },
+    {
+        "kratica": "UZB",
+        "drzava": "Uzbekistan"
+    },
+    {
+        "kratica": "GEO",
+        "drzava": "Georgia"
+    },
+    {
+        "kratica": "VEN",
+        "drzava": "Venezuela"
+    },
+    {
+        "kratica": "GHA",
+        "drzava": "Ghana"
+    },
+    {
+        "kratica": "SMR",
+        "drzava": "San Marino"
+    },
+    {
+        "kratica": "ALB",
+        "drzava": "Albania"
+    },
+    {
+        "kratica": "MNE",
+        "drzava": "Montenegro"
+    },
+    {
+        "kratica": "FIJ",
+        "drzava": "Fiji"
+    },
+    {
+        "kratica": "MAD",
+        "drzava": "Madagascar"
+    },
+    {
+        "kratica": "KGZ",
+        "drzava": "Kyrgyzstan"
+    },
+    {
+        "kratica": "URU",
+        "drzava": "Uruguay"
+    },
+    {
+        "kratica": "MON",
+        "drzava": "Monaco"
+    },
+    {
+        "kratica": "NGR",
+        "drzava": "Nigeria"
+    },
+    {
+        "kratica": "KOS",
+        "drzava": "Kosovo"
+    },
+    {
+        "kratica": "RSA",
+        "drzava": "South Africa"
+    },
+    {
+        "kratica": "ZIM",
+        "drzava": "Zimbabwe"
+    },
+    {
+        "kratica": "IVB",
+        "drzava": "Virgin Islands British"
+    },
+    {
+        "kratica": "COL",
+        "drzava": "Colombia"
+    },
+    {
+        "kratica": "TJK",
+        "drzava": "Tajikistan"
+    },
+    {
+        "kratica": "ECU",
+        "drzava": "Ecuador"
+    },
+    {
+        "kratica": "KEN",
+        "drzava": "Kenya"
+    },
+    {
+        "kratica": "THA",
+        "drzava": "Thailand"
+    },
+    {
+        "kratica": "TOG",
+        "drzava": "Togo"
+    },
+    {
+        "kratica": "TLS",
+        "drzava": "Timor Leste"
+    },
+    {
+        "kratica": "LUX",
+        "drzava": "Luxembourg"
+    },
+    {
+        "kratica": "PAR",
+        "drzava": "Paraguay"
+    },
+    {
+        "kratica": "MLT",
+        "drzava": "Malta"
+    },
+    {
+        "kratica": "SGP",
+        "drzava": "Singapore"
+    },
+    {
+        "kratica": "EGY",
+        "drzava": "Egypt"
+    },
+    {
+        "kratica": "CAY",
+        "drzava": "Cayman Islands"
+    },
+    {
+        "kratica": "SEN",
+        "drzava": "Senegal"
+    },
+    {
+        "kratica": "NEP",
+        "drzava": "Nepal"
+    },
+    {
+        "kratica": "ETH",
+        "drzava": "Ethiopia"
+    },
+    {
+        "kratica": "BER",
+        "drzava": "Bermuda"
+    },
+    {
+        "kratica": "JAM",
+        "drzava": "Jamaica"
+    },
+    {
+        "kratica": "MAS",
+        "drzava": "Malaysia"
+    },
+    {
+        "kratica": "PER",
+        "drzava": "Peru"
+    },
+    {
+        "kratica": "GUM",
+        "drzava": "Guam"
+    },
+    {
+        "kratica": "ROK",
+        "drzava": "Republic of Korea"
+    }
+]
