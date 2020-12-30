@@ -1,0 +1,13 @@
+% rebase('base.html', title='Athletes')
+
+  <h1>
+    Athletes
+  </h1>
+
+  <select class="form-select" aria-label="Default select example">
+      <option selected>Open this select menu</option>
+      % for tekmovalec in tekmovalci:
+        <option value="{{tekmovalec}}">{{tekmovalec}}</option>
+      % end
+
+  </select>

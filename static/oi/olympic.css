@@ -1,0 +1,58 @@
+body {
+  padding-bottom: 20px;
+  background-image: url(olympic_games.png);
+  background-size: cover;
+  background-position: top;
+  background-attachment: scroll;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#alignment {
+  position: center;
+  top: 50%;
+  left: 50%;
+}
+
+#results-button {
+  margin-top: 25px;
+  background-color: #7A619C;
+}
+
+.dropdown-menu {
+  width: 100%;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.table-of-results {
+  width: 800px;
+  height: 500px;
+  border-collapse: collapse;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.table-of-results thead th {
+  position: sticky;
+  top: 0;
+}
+
+.table {
+  border-collapse: collapse;
+}
+
+
+
+
+
+
+
