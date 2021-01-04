@@ -16,7 +16,7 @@ def poisci():
 
 @get('/name/<name>')
 def poisci(name):
-    return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec.poisci_po_imenu(ime))
+    return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec.poisci_po_imenu(name))
 
 @get('/country/<drzava>')
 def poisci(drzava):

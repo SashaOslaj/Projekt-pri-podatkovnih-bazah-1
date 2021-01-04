@@ -32,7 +32,7 @@ class Tekmovalec:
     def __init__(self, ime=None, letnica=None, drzava=None, id=None):
         self.ime = ime
         self.letnica = letnica
-        self.drzava = drzava
+        self.drzava = iz_star_v_novo.get(drzava, drzava)
         self.id = id
 
     def __str__(self):
@@ -41,13 +41,17 @@ class Tekmovalec:
         return self.ime + ' born ' + self.letnica + ' from ' + str(self.drzava)
 
     @staticmethod
+    def poisci_sql(sql, podatki=None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Tekmovalec(*poizvedba)
+
+    @staticmethod
     def poisci_vse_tekmovalce():
         sql = '''
-        SELECT ime FROM tekmovalec
+        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
+        JOIN drzava ON tekmovalec.drzava = drzava.kratica
         ORDER BY ime'''
-        poizvedbe = conn.execute(sql).fetchall()
-        for poizvedba in poizvedbe:
-            yield Tekmovalec(poizvedba[0])
+        yield from Tekmovalec.poisci_sql(sql)
 
     @staticmethod
     def poisci_po_imenu(ime, limit=None):
@@ -59,12 +63,7 @@ class Tekmovalec:
         if limit:
             sql += ' LIMIT ?'
             podatki.append(limit)
-        poizvedbe = conn.execute(sql, podatki)
-        for poizvedba in poizvedbe:
-            d = poizvedba[2]
-            if poizvedba[2] in iz_star_v_novo:
-                d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
+        yield from Tekmovalec.poisci_sql(sql, podatki)
 
     @staticmethod
     def poisci_po_drzavi(drzava):
@@ -75,12 +74,7 @@ class Tekmovalec:
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
         WHERE tekmovalec.drzava LIKE ?'''.format(k)
-        poizvedbe = conn.execute(sql, ['%' + k + '%'])
-        for poizvedba in poizvedbe:
-            d = poizvedba[2]
-            if poizvedba[2] in iz_star_v_novo:
-                d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
+        yield from Tekmovalec.poisci_sql(sql, ['%' + k + '%'])
 
     @staticmethod
     def poisci_po_letnici(leto):
@@ -88,12 +82,7 @@ class Tekmovalec:
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
         WHERE tekmovalec.rojen LIKE ?'''
-        poizvedbe = conn.execute(sql, ['%' + leto + '%'])
-        for poizvedba in poizvedbe:
-            d = poizvedba[2]
-            if poizvedba[2] in iz_star_v_novo:
-                d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
+        yield from Tekmovalec.poisci_sql(sql, ['%' + leto + '%'])
 
 
 class Leta:
