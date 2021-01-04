@@ -13,7 +13,6 @@ def osnovna_stran():
 def poisci():
     return template('izberi_tekmovalca.html', tekmovalci=model.Tekmovalec().poisci_vse_tekmovalce())
 
-
 @get('/name/<name>')
 def poisci(name):
     return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec(ime=name).poisci_po_imenu())
