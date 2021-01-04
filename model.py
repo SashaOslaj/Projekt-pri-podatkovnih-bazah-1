@@ -82,7 +82,7 @@ class Tekmovalec:
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
         WHERE tekmovalec.rojen LIKE ?'''
-        yield from Tekmovalec.poisci_sql(sql, ['%' + leto + '%'])
+        yield from Tekmovalec.poisci_sql(sql, [str(leto) + '-%'])
 
 
 class Leta:

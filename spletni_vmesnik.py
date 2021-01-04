@@ -22,7 +22,7 @@ def poisci(name):
 def poisci(drzava):
     return template('tekmovalci.html', name=drzava, poizvedbe=model.Tekmovalec.poisci_po_drzavi(drzava))
 
-@get('/year/<letnica>')
+@get('/year/<letnica:int>')
 def poisci(letnica):
     return template('tekmovalci.html', name=letnica, poizvedbe=model.Tekmovalec.poisci_po_letnici(letnica))
 
