@@ -4,18 +4,14 @@
     Athletes
   </h1>
 
-  <form>
-    <input type="text" id="autocomplete" />
-    <input type="hidden" name="id" id="athlid" />
-    <button class="button">Show</button>
-  </form>
-
+  <input type="text" id="autocomplete" />
 
   <script type="text/javascript">
     $('#autocomplete').autocomplete({
       serviceUrl: '/autocomplete/athletes',
       onSelect: function (suggestion) {
-        $('#athlid').val(suggestion.data);
+        window.location.href = "/athlete/" + suggestion.data;
       }
     });
   </script>
+  
