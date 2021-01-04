@@ -29,17 +29,19 @@ iz_star_v_novo_krat = {
 
 class Tekmovalec:
     
-    def __init__(self, ime=None, letnica=None, drzava=None):
+    def __init__(self, ime=None, letnica=None, drzava=None, id=None):
         self.ime = ime
         self.letnica = letnica
         self.drzava = drzava
+        self.id = id
 
     def __str__(self):
         if self.letnica==None and self.drzava==None:
             return self.ime
         return self.ime + ' born ' + self.letnica + ' from ' + str(self.drzava)
 
-    def poisci_vse_tekmovalce(self):
+    @staticmethod
+    def poisci_vse_tekmovalce():
         sql = '''
         SELECT ime FROM tekmovalec
         ORDER BY ime'''
@@ -47,45 +49,51 @@ class Tekmovalec:
         for poizvedba in poizvedbe:
             yield Tekmovalec(poizvedba[0])
 
-
-    def poisci_po_imenu(self):
+    @staticmethod
+    def poisci_po_imenu(ime, limit=None):
         sql = '''
-        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime FROM tekmovalec
+        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.ime LIKE "%{}%"'''.format(self.ime)
-        poizvedbe = conn.execute(sql).fetchall()
+        WHERE tekmovalec.ime LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        poizvedbe = conn.execute(sql, podatki)
         for poizvedba in poizvedbe:
             d = poizvedba[2]
             if poizvedba[2] in iz_star_v_novo:
                 d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d)
+            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
 
-    def poisci_po_drzavi(self):
-        k = self.drzava
+    @staticmethod
+    def poisci_po_drzavi(drzava):
+        k = drzava
         if k in iz_star_v_novo_krat:
             k = iz_star_v_novo_krat[k]
         sql = '''
-        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime FROM tekmovalec
+        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.drzava LIKE "%{}%"'''.format(k)
-        poizvedbe = conn.execute(sql).fetchall()
+        WHERE tekmovalec.drzava LIKE ?'''.format(k)
+        poizvedbe = conn.execute(sql, ['%' + k + '%'])
         for poizvedba in poizvedbe:
             d = poizvedba[2]
             if poizvedba[2] in iz_star_v_novo:
                 d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d)
+            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
 
-    def poisci_po_letnici(self):
+    @staticmethod
+    def poisci_po_letnici(leto):
         sql = '''
-        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime FROM tekmovalec
+        SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.rojen LIKE "%{}"'''.format(self.letnica)
-        poizvedbe = conn.execute(sql).fetchall()
+        WHERE tekmovalec.rojen LIKE ?'''
+        poizvedbe = conn.execute(sql, ['%' + leto + '%'])
         for poizvedba in poizvedbe:
             d = poizvedba[2]
             if poizvedba[2] in iz_star_v_novo:
                 d = iz_star_v_novo[poizvedba[2]]
-            yield Tekmovalec(poizvedba[0], poizvedba[1], d)
+            yield Tekmovalec(poizvedba[0], poizvedba[1], d, poizvedba[3])
 
 
 class Leta:

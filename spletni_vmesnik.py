@@ -1,4 +1,5 @@
 from bottle import *
+import json
 import model
 
 @get('/static/<filename:path>')
@@ -11,18 +12,24 @@ def osnovna_stran():
 
 @get('/athletes')
 def poisci():
-    return template('izberi_tekmovalca.html', tekmovalci=model.Tekmovalec().poisci_vse_tekmovalce())
+    return template('izberi_tekmovalca.html')
 
 @get('/name/<name>')
 def poisci(name):
-    return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec(ime=name).poisci_po_imenu())
+    return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec.poisci_po_imenu(ime))
 
 @get('/country/<drzava>')
 def poisci(drzava):
-    return template('tekmovalci.html', name=drzava, poizvedbe=model.Tekmovalec(drzava=drzava).poisci_po_drzavi())
+    return template('tekmovalci.html', name=drzava, poizvedbe=model.Tekmovalec.poisci_po_drzavi(drzava))
 
 @get('/year/<letnica>')
 def poisci(letnica):
-    return template('tekmovalci.html', name=letnica, poizvedbe=model.Tekmovalec(letnica=letnica).poisci_po_letnici())
+    return template('tekmovalci.html', name=letnica, poizvedbe=model.Tekmovalec.poisci_po_letnici(letnica))
+
+@get('/autocomplete/athletes')
+def autocomplete_athletes():
+    query = request.query.get("query", "")
+    return json.dumps({"suggestions": [{"value": tekmovalec.ime, "data": tekmovalec.id}
+                                       for tekmovalec in model.Tekmovalec.poisci_po_imenu(query, limit=20)]})
 
 run(host='localhost', port=8080, reloader=True, debug=True)
