@@ -3,7 +3,7 @@ import sqlite3
 conn = sqlite3.connect('zimskeOI.db')
 
 iz_star_v_novo = {
-    "Federal Republic Of Germany 1950 1990 Ger Since" : "Germany",
+    "Federal Republic Of Germany 1950 1990 Ger Since": "Germany",
     "Russian Federation": "Russia",
     "United Team Of Germany 1956 1960 1964": "Germany",
     "Olympic Athlete From Russia": "Russia",
@@ -100,3 +100,32 @@ class Leta:
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield Leta(poizvedba[0])
+
+class Uporabnik:
+
+    def __init__(self, uporabniskoIme, geslo=None):
+        self.uporabniskoIme = uporabniskoIme
+        self.geslo = geslo
+
+    def __str__(self):
+        return self.uporabniskoIme
+
+    def jeUporabnik(self):
+        if self.geslo is None:
+            sql = '''
+                    SELECT * FROM uporabnik
+                    WHERE uporabniskoIme="{}"'''.format(self.uporabniskoIme)
+        else:
+            sql = '''
+            SELECT * FROM uporabnik
+            WHERE uporabniskoIme="{}" AND geslo="{}"'''.format(self.uporabniskoIme, self.geslo)
+        poizvedba = conn.execute(sql)
+        if poizvedba.fetchone():
+            return poizvedba
+        return None
+
+    def vstaviUporabnika(self):
+        sql='''
+        INSERT INTO uporabnik (uporabniskoIme, geslo) VALUES ("{}","{}")'''.format(self.uporabniskoIme, self.geslo)
+        conn.execute(sql)
+
