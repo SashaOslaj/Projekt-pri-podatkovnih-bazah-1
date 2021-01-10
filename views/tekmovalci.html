@@ -1,10 +1,29 @@
-% rebase('base.html')
-<h2>Results for {{name}}</h2>
+% rebase('base.html', title=name)
+<h2>Rezultati {{name}}</h2>
 
-<ol type="I">
-     % for poizvedba in poizvedbe:
-    <ul>
-        {{poizvedba}}
-    </ul>
+<table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Drzava</th>
+      <th scope="col">Ime</th>
+      <th scope="col">Uvrstitev</th>
+      <th scope="col">Čas</th>
+      <th scope="col">Leto</th>
+      <th scope="col">Disciplina</th>
+    </tr>
+  </thead>
+  <tbody>
+    % for ime, leto, disciplina, drzava, mesto, rezultat in poizvedbe:
+    <tr>
+        <td>{{drzava}}</td>
+        <td>{{ime}}</td>
+        <td>{{mesto}}</td>
+        <td>{{rezultat}}</td>
+        <td>{{leto}}</td>
+        <td>{{disciplina}}</td>
+    </tr>
     % end
-</ol>
+    % end
+  </tbody>  
+
+</table>

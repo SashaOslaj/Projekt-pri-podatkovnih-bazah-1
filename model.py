@@ -66,6 +66,28 @@ class Tekmovalec:
         yield from Tekmovalec.poisci_sql(sql, podatki)
 
     @staticmethod
+    def poisci_po_id(id):
+        sql = '''
+            SELECT ime FROM tekmovalec
+            WHERE tekmovalec.id=?'''
+        podatki = [id]
+        tekm = conn.execute(sql, podatki).fetchone()
+        print(tekm[0])
+        return Tekmovalec(ime=tekm[0])
+
+    @staticmethod
+    def poisci_po_imenu(ime, limit=None):
+        sql = '''
+            SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
+            JOIN drzava ON tekmovalec.drzava = drzava.kratica
+            WHERE tekmovalec.ime LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Tekmovalec.poisci_sql(sql, podatki)
+
+    @staticmethod
     def poisci_po_drzavi(drzava):
         k = drzava
         if k in iz_star_v_novo_krat:
@@ -93,13 +115,88 @@ class Leta:
     def __str__(self):
         return str(self.leto)
 
-    def pridobi_vsa_leta(self):
+    @staticmethod
+    def pridobi_vsa_leta():
         sql = '''
         SELECT leto FROM olimpijskeIgre
         ORDER BY leto DESC'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield Leta(poizvedba[0])
+
+
+class Discipline:
+
+    def __init__(self, disciplina=None):
+        self.disciplina = disciplina
+
+    def __str__(self):
+        return self.disciplina
+
+    @staticmethod
+    def pridobi_vse_discipline():
+        sql = '''
+                SELECT ime FROM disciplina
+                ORDER BY ime DESC'''
+        poizvedbe = conn.execute(sql).fetchall()
+        for poizvedba in poizvedbe:
+            yield Discipline(poizvedba[0])
+
+
+class Poddiscipline:
+
+    def __init__(self, disciplina=None, poddisciplina=None):
+        self.disciplina = disciplina
+        self.poddisciplina = poddisciplina
+
+    def __str__(self):
+        return self.poddisciplina
+
+    @staticmethod
+    def pridobi_vse_poddiscipline():
+        sql = '''
+                SELECT ime FROM poddisciplina
+                ORDER BY ime DESC'''
+        poizvedbe = conn.execute(sql).fetchall()
+        for poizvedba in poizvedbe:
+            yield poizvedba[0]
+
+class Rezultati:
+
+    def __init__(self, ime=None, leto=None, poddisciplina=None, drzava=None, mesto=None, rezultat=None):
+        self.ime = ime
+        self.leto = leto
+        self.poddisciplina = poddisciplina
+        self.drzava = drzava
+        self.mesto = mesto
+        self.rezultat = rezultat
+
+    def __str__(self):
+        return self.drzava, self.ime, self.mesto, self.rezultat, self.leto, self.poddisciplina
+
+    def pridobi_rezultate(self):
+        sql = '''
+        SELECT ime.tekmovalec, leto.rezultat, disciplina.rezultat, ime.drzava, mesto.rezultat, rezultat.rezultat
+        FROM rezultat
+        JOIN tekmovalec ON id.tekmovalec = tekmovalec.rezultat
+        JOIN drzava ON kratica.drzava = drzava.rezultat
+        WHERE leto.rezultat={} AND disciplina.rezultat={}'''.format(self.leto, self.poddisciplina)
+        poizvedbe = conn.execute(sql).fetchall()
+        for poizvedba in poizvedbe:
+            yield poizvedba
+
+    @staticmethod
+    def pridobi_rezultate_iz_id(id):
+        sql = '''
+        SELECT tekmovalec.ime, rezultat.leto, rezultat.disciplina, drzava.ime, rezultat.mesto, rezultat.rezultat
+        FROM rezultat
+        JOIN tekmovalec ON tekmovalec.id = rezultat.tekmovalec
+        JOIN drzava ON drzava.kratica = rezultat.drzava
+        WHERE rezultat.tekmovalec={}'''.format(id)
+        poizvedbe = conn.execute(sql).fetchall()
+        for poizvedba in poizvedbe:
+            yield poizvedba
+
 
 class Uporabnik:
 
@@ -125,7 +222,8 @@ class Uporabnik:
         return None
 
     def vstaviUporabnika(self):
-        sql='''
+        sql = '''
         INSERT INTO uporabnik (uporabniskoIme, geslo) VALUES ("{}","{}")'''.format(self.uporabniskoIme, self.geslo)
         conn.execute(sql)
+        conn.commit()
 

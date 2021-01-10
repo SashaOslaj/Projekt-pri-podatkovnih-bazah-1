@@ -1,13 +1,36 @@
 from bottle import *
 import json
+import hashlib
 import model
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Pomozne funkcije
 def password_md5(s):
     """Vrni MD5 hash danega UTF-8 niza. Gesla vedno spravimo v bazo
        kodirana s to funkcijo."""
     h = hashlib.md5()
     h.update(s.encode('utf-8'))
     return h.hexdigest()
+
+def get_user():
+    """Poglej cookie in ugotovi, kdo je prijavljeni uporabnik,
+       vrni njegov username in ime. Če ni prijavljen, presumeri
+       na stran za prijavo ali vrni None (advisno od auto_login).
+    """
+    # Dobimo username iz piškotka
+    username = request.get_cookie('username')
+    # Preverimo, ali ta uporabnik obstaja
+    if username is not None:
+        r = model.Uporabnik(username).jeUporabnik()
+        if r is not None:
+            # uporabnik obstaja, vrnemo njegove podatke
+            return username
+    # Če pridemo do sem, uporabnik ni prijavljen, naredimo redirect
+    else:
+        return None
+
+# Pomozne funkcije
+#-----------------------------------------------------------------------------------------------------------------------
 
 @get('/static/<filename:path>')
 def static(filename):
@@ -76,20 +99,30 @@ def register_post():
         redirect('/')
 
 @get('/athletes')
-def poisci():
+def poisci_tekmovalca():
     return template('izberi_tekmovalca.html')
 
-@get('/name/<name>')
-def poisci(name):
-    return template('tekmovalci.html', name=name, poizvedbe=model.Tekmovalec.poisci_po_imenu(name))
+@get('/athlete/<id>')
+def vrni_po_id(id):
+    ime = model.Tekmovalec.poisci_po_id(id)
+    return template('tekmovalci.html', name=ime, poizvedbe=model.Rezultati.pridobi_rezultate_iz_id(id))
 
 @get('/country/<drzava>')
-def poisci(drzava):
+def vrni_po_drzavi(drzava):
     return template('tekmovalci.html', name=drzava, poizvedbe=model.Tekmovalec.poisci_po_drzavi(drzava))
 
 @get('/year/<letnica:int>')
-def poisci(letnica):
+def vrni_po_letnici(letnica):
     return template('tekmovalci.html', name=letnica, poizvedbe=model.Tekmovalec.poisci_po_letnici(letnica))
+
+@get('/results')
+def poisci_rezultat():
+    return template('rezultati.html', leta=model.Leta.pridobi_vsa_leta(), discipline=model.Discipline.pridobi_vse_discipline(), poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
+
+@get('/results/<letnica>/<disciplina>/<poddisciplina>')
+def vrni_rezultate(letnica, disciplina, poddisciplina):
+    # dokoncati
+    return "Hello"
 
 @get('/autocomplete/athletes')
 def autocomplete_athletes():

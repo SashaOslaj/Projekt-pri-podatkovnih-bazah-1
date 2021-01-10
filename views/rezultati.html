@@ -1,0 +1,60 @@
+% rebase('base.html', title='Athletes')
+
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+
+        <div class="form-group">
+            <select class="form-control" id="select-leto">
+              <option selected> Izberi leto želenih olimpijskih iger </option>
+              % for leto in leta:
+              <option value="/{{leto}}"> {{leto}} </option>
+              % end
+            </select>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control" id="select-disciplino">
+              <option selected> Izberi disciplino </option>
+              % for disciplina in discipline:
+              <option value="/{{disciplina}}"> {{disciplina}} </option>
+              % end
+            </select>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control" id="select-poddisciplino">
+              <option selected> Izberi poddisciplino </option>
+              % for poddisciplina in poddiscipline:
+              <option value="/{{poddisciplina}}"> {{poddisciplina}} </option>
+              % end
+            </select>
+        </div>
+
+        <script>
+            var leto
+            var disciplina
+            var poddisciplina
+            var text_leto
+            var text_disciplina
+            var text_poddisciplina
+
+            function getUrl() {
+              leto = document.getElementById('select-leto');
+              text_leto = leto.options[leto.selectedIndex].text;
+
+              disciplina = document.getElementById('select-disciplina');
+              text_disciplina = disciplina.options[disciplina.selectedIndex].text;
+
+              poddisciplina = document.getElementById('select-poddisciplina');
+              text_poddisciplina = poddisciplina.options[poddisciplina.selectedIndex].text;
+
+              return "/results/" + text_leto + "/" + text_disciplina + "/" + text_poddisciplina + "/";
+            }
+        </script>
+        <a class="btn" id="results-button" href="javascript:document.location.href=getUrl();" role="button">Rezultati</a>
+
+    </div>
+  </div>
+</div>
+
