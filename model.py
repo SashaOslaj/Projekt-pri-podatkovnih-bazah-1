@@ -137,7 +137,7 @@ class Discipline:
     def pridobi_vse_discipline():
         sql = '''
                 SELECT ime FROM disciplina
-                ORDER BY ime DESC'''
+                ORDER BY ime'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield Discipline(poizvedba[0])
@@ -156,7 +156,7 @@ class Poddiscipline:
     def pridobi_vse_poddiscipline():
         sql = '''
                 SELECT ime FROM poddisciplina
-                ORDER BY ime DESC'''
+                ORDER BY ime'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba[0]
@@ -174,13 +174,14 @@ class Rezultati:
     def __str__(self):
         return self.drzava, self.ime, self.mesto, self.rezultat, self.leto, self.poddisciplina
 
-    def pridobi_rezultate(self):
+    @staticmethod
+    def pridobi_rezultate(leto, poddisciplina):
         sql = '''
         SELECT ime.tekmovalec, leto.rezultat, disciplina.rezultat, ime.drzava, mesto.rezultat, rezultat.rezultat
         FROM rezultat
         JOIN tekmovalec ON id.tekmovalec = tekmovalec.rezultat
         JOIN drzava ON kratica.drzava = drzava.rezultat
-        WHERE leto.rezultat={} AND disciplina.rezultat={}'''.format(self.leto, self.poddisciplina)
+        WHERE leto.rezultat={} AND disciplina.rezultat={}'''.format(leto, poddisciplina)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba

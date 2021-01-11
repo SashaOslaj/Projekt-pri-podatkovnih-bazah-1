@@ -1,11 +1,11 @@
-% rebase('base.html', title='Athletes')
+% rebase('base.html', title='Results')
 
 <div class="container">
   <div class="row">
     <div class="col text-center">
 
         <div class="form-group">
-            <select class="form-control" id="select-leto">
+            <select class="form-control" id="leto">
               <option selected> Izberi leto želenih olimpijskih iger </option>
               % for leto in leta:
               <option value="/{{leto}}"> {{leto}} </option>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group">
-            <select class="form-control" id="select-disciplino">
+            <select class="form-control" id="disciplina">
               <option selected> Izberi disciplino </option>
               % for disciplina in discipline:
               <option value="/{{disciplina}}"> {{disciplina}} </option>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group">
-            <select class="form-control" id="select-poddisciplino">
+            <select class="form-control" id="poddisciplina">
               <option selected> Izberi poddisciplino </option>
               % for poddisciplina in poddiscipline:
               <option value="/{{poddisciplina}}"> {{poddisciplina}} </option>
@@ -35,21 +35,21 @@
             var leto
             var disciplina
             var poddisciplina
-            var text_leto
+            var value_leto
             var text_disciplina
             var text_poddisciplina
 
             function getUrl() {
-              leto = document.getElementById('select-leto');
-              text_leto = leto.options[leto.selectedIndex].text;
+              leto = document.getElementById('leto');
+              value_leto = leto.options[leto.selectedIndex].value;
 
-              disciplina = document.getElementById('select-disciplina');
+              disciplina = document.getElementById('disciplina');
               text_disciplina = disciplina.options[disciplina.selectedIndex].text;
 
-              poddisciplina = document.getElementById('select-poddisciplina');
+              poddisciplina = document.getElementById('poddisciplina');
               text_poddisciplina = poddisciplina.options[poddisciplina.selectedIndex].text;
 
-              return "/results/" + text_leto + "/" + text_disciplina + "/" + text_poddisciplina + "/";
+              return "results" + value_leto + "/" + text_poddisciplina + "/";
             }
         </script>
         <a class="btn" id="results-button" href="javascript:document.location.href=getUrl();" role="button">Rezultati</a>

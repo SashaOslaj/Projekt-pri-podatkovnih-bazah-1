@@ -119,10 +119,20 @@ def vrni_po_letnici(letnica):
 def poisci_rezultat():
     return template('rezultati.html', leta=model.Leta.pridobi_vsa_leta(), discipline=model.Discipline.pridobi_vse_discipline(), poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
 
-@get('/results/<letnica>/<disciplina>/<poddisciplina>')
-def vrni_rezultate(letnica, disciplina, poddisciplina):
-    # dokoncati
-    return "Hello"
+@post('/results')
+def vrni_poizvedbo():
+    letnica = request.select.leto
+    poddisciplina = request.select.poddisciplina
+    print(letnica)
+    return template('rezultati.html', l=letnica, pd=poddisciplina,
+                    poizvedbe=model.Rezultati.pridobi_rezultate(letnica, poddisciplina))
+
+@get('/results/<letnica:int>/<poddisciplina>')
+def vrni_rezultate(letnica, poddisciplina):
+    poddisciplina = poddisciplina.replace("%20", " ")
+    print(poddisciplina)
+    return template('rezultati.html', l=letnica, pd=poddisciplina,
+                    poizvedbe=model.Rezultati.pridobi_rezultate(letnica,poddisciplina))
 
 @get('/autocomplete/athletes')
 def autocomplete_athletes():
