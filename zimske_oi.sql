@@ -8,13 +8,14 @@ BEGIN TRANSACTION;
 
 -- Table: disciplina
 CREATE TABLE disciplina (
-    ime TEXT PRIMARY KEY
+    id  INTEGER  PRIMARY KEY AUTOINCREMENT,
+    ime TEXT     UNIQUE NOT NULL
 );
 
 -- Table: drzava
 CREATE TABLE drzava (
     kratica VARCHAR(3)  PRIMARY KEY,
-    ime     TEXT UNIQE
+    ime     TEXT
 );
 
 -- Table: olimpijskeIgre
@@ -25,8 +26,9 @@ CREATE TABLE olimpijskeIgre (
 
 -- Table: poddisciplina
 CREATE TABLE poddisciplina (
-    ime        TEXT PRIMARY KEY,
-    disciplina TEXT REFERENCES disciplina(ime) 
+    id         INTEGER    PRIMARY KEY AUTOINCREMENT,
+    ime        TEXT       NOT NULL,
+    disciplina INT        REFERENCES disciplina(id)
 );
 
 -- Table: popravi
@@ -41,8 +43,8 @@ CREATE TABLE popravi (
 CREATE TABLE rezultat (
     id         INTEGER    PRIMARY KEY AUTOINCREMENT,
     leto       INT        NOT NULL REFERENCES olimpijskeIgre(leto),
-    disciplina TEXT       NOT NULL REFERENCES poddisciplina(ime),
-    tekmovalec INT       NOT NULL REFERENCES tekmovalec(id),
+    disciplina INT        NOT NULL REFERENCES poddisciplina(id),
+    tekmovalec INT        NOT NULL REFERENCES tekmovalec(id),
     drzava     VARCHAR(3) REFERENCES drzava(kratica),
     mesto      INT,
     rezultat   TEXT
@@ -53,7 +55,7 @@ CREATE TABLE tekmovalec (
     id     INTEGER     PRIMARY KEY AUTOINCREMENT,
     ime    TEXT        NOT NULL,
     rojen  DATE,
-    drzava     VARCHAR(3) REFERENCES drzava(kratica)
+    drzava VARCHAR(3)  REFERENCES drzava(kratica)
 );
 
 -- Table: uporabnik

@@ -5,6 +5,7 @@
     <div class="col text-center">
 
         <div class="form-group">
+            <label for="leto" class="sr-only" style="font-size: large; font-weight: bold;">Leto olimpijskih iger</label>
             <select class="form-control" id="leto">
               <option selected> Izberi leto želenih olimpijskih iger </option>
               % for leto in leta:
@@ -14,6 +15,7 @@
         </div>
 
         <div class="form-group">
+            <label for="disciplina" class="sr-only" style="font-size: large; font-weight: bold;">Disciplina</label>
             <select class="form-control" id="disciplina">
               <option selected> Izberi disciplino </option>
               % for disciplina in discipline:
@@ -23,10 +25,11 @@
         </div>
 
         <div class="form-group">
-            <select class="form-control" id="poddisciplina">
+            <label for="id_poddisciplina" class="sr-only" style="font-size: large; font-weight: bold;">Poddisciplina</label>
+            <select class="form-control" id="id_poddisciplina">
               <option selected> Izberi poddisciplino </option>
-              % for poddisciplina in poddiscipline:
-              <option value="/{{poddisciplina}}"> {{poddisciplina}} </option>
+              % for id_poddisciplina, poddisciplina in poddiscipline:
+              <option value="/{{id_poddisciplina}}"> {{poddisciplina}} </option>
               % end
             </select>
         </div>
@@ -37,7 +40,7 @@
             var poddisciplina
             var value_leto
             var text_disciplina
-            var text_poddisciplina
+            var value_poddisciplina
 
             function getUrl() {
               leto = document.getElementById('leto');
@@ -46,13 +49,13 @@
               disciplina = document.getElementById('disciplina');
               text_disciplina = disciplina.options[disciplina.selectedIndex].text;
 
-              poddisciplina = document.getElementById('poddisciplina');
-              text_poddisciplina = poddisciplina.options[poddisciplina.selectedIndex].text;
+              poddisciplina = document.getElementById('id_poddisciplina');
+              value_poddisciplina = poddisciplina.options[poddisciplina.selectedIndex].value;
 
-              return "results" + value_leto + "/" + text_poddisciplina + "/";
+              return "results" + value_leto + value_poddisciplina;
             }
         </script>
-        <a class="btn" id="results-button" href="javascript:document.location.href=getUrl();" role="button">Rezultati</a>
+        <a class="btn" style="background-color: deepskyblue; color: white; padding: 12px 28px;" id="results-button" href="javascript:document.location.href=getUrl();" role="button">Rezultati</a>
 
     </div>
   </div>

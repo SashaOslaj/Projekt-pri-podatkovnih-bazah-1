@@ -104,8 +104,9 @@ def poisci_tekmovalca():
 
 @get('/athlete/<id>')
 def vrni_po_id(id):
-    ime = model.Tekmovalec.poisci_po_id(id)
-    return template('tekmovalci.html', name=ime, poizvedbe=model.Rezultati.pridobi_rezultate_iz_id(id))
+    print()
+    ime, drzava = model.Tekmovalec.poisci_po_id(id)
+    return template('tekmovalci.html', name=ime, drzava=drzava, poizvedbe=model.Rezultati.pridobi_rezultate_iz_id(id))
 
 @get('/country/<drzava>')
 def vrni_po_drzavi(drzava):
@@ -117,22 +118,15 @@ def vrni_po_letnici(letnica):
 
 @get('/results')
 def poisci_rezultat():
-    return template('rezultati.html', leta=model.Leta.pridobi_vsa_leta(), discipline=model.Discipline.pridobi_vse_discipline(), poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
+    return template('rezultati.html',
+                    leta=model.Leta.pridobi_vsa_leta(),
+                    discipline=model.Discipline.pridobi_vse_discipline(),
+                    poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
 
-@post('/results')
-def vrni_poizvedbo():
-    letnica = request.select.leto
-    poddisciplina = request.select.poddisciplina
-    print(letnica)
-    return template('rezultati.html', l=letnica, pd=poddisciplina,
-                    poizvedbe=model.Rezultati.pridobi_rezultate(letnica, poddisciplina))
-
-@get('/results/<letnica:int>/<poddisciplina>')
+@get('/results/<letnica:int>/<poddisciplina:int>')
 def vrni_rezultate(letnica, poddisciplina):
-    poddisciplina = poddisciplina.replace("%20", " ")
-    print(poddisciplina)
-    return template('rezultati.html', l=letnica, pd=poddisciplina,
-                    poizvedbe=model.Rezultati.pridobi_rezultate(letnica,poddisciplina))
+    return template('izpis_rezultatov.html', l=letnica, pd=model.Poddiscipline.pridobi_poddisciplino(poddisciplina),
+                    poizvedbe=model.Rezultati.pridobi_rezultate(letnica, poddisciplina))
 
 @get('/autocomplete/athletes')
 def autocomplete_athletes():

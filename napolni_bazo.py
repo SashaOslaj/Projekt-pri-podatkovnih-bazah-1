@@ -69,20 +69,6 @@ def dodaj_disciplino(conn, disciplina):
     conn.execute(sql, parametri)
 
 
-def dodaj_poddisciplino(conn, poddisciplina, disciplina):
-    sql = '''
-        INSERT INTO poddisciplina
-        (ime, disciplina)
-        VALUES
-        (?,?)
-    '''
-    parametri = [
-        poddisciplina,
-        disciplina,
-    ]
-    conn.execute(sql, parametri)
-
-
 def dodaj_tekmovalca(conn, tekmovalci):
     sql = '''
         INSERT INTO tekmovalec
@@ -107,16 +93,6 @@ def napolni_tabele_drzav(conn, drzave):
 def napolni_tabele_tekmovalcev(conn, tekmovalci):
     for tekmovalec in tekmovalci:
         dodaj_tekmovalca(conn, tekmovalec)
-
-    conn.commit()
-
-
-def napolni_tabele_poddiscipline(conn, rezultati):
-    ze_videne_poddisc = set()
-    for rezultat in rezultati:
-        if rezultat['poddisciplina'] not in ze_videne_poddisc:
-            ze_videne_poddisc.add(rezultat['poddisciplina'])
-            dodaj_poddisciplino(conn, rezultat['poddisciplina'], rezultat['disciplina'])
 
     conn.commit()
 
@@ -146,7 +122,7 @@ def naredi_bazo(pobrisi_ce_obstaja=False):
         if pobrisi_ce_obstaja:
             os.remove(IME_DATOTEKE_Z_BAZO)
         else:
-            print('Baza že obstaja in je ne bom spreminjal.')
+            print('Baza že obstaja in je ne bomo spreminjali.')
             return
     conn = sqlite3.connect(IME_DATOTEKE_Z_BAZO)
     # Ustvarimo tabele iz DDL datoteke
@@ -160,7 +136,6 @@ def naredi_bazo(pobrisi_ce_obstaja=False):
     with open(IME_DATOTEKE_Z_REZULTATI) as datoteka_s_podatki:
         rezultati = json.load(datoteka_s_podatki)
     napolni_tabele_preostale(conn, rezultati)
-    napolni_tabele_poddiscipline(conn, rezultati)
     with open(IME_DATOTEKE_S_TEKMOVALCI) as datoteka_s_podatki:
         tekmovalci = json.load(datoteka_s_podatki)
     napolni_tabele_tekmovalcev(conn, tekmovalci)

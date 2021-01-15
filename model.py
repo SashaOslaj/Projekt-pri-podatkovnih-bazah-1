@@ -68,12 +68,12 @@ class Tekmovalec:
     @staticmethod
     def poisci_po_id(id):
         sql = '''
-            SELECT ime FROM tekmovalec
+            SELECT tekmovalec.ime, drzava.ime FROM tekmovalec
+            JOIN drzava ON tekmovalec.drzava = drzava.kratica
             WHERE tekmovalec.id=?'''
         podatki = [id]
         tekm = conn.execute(sql, podatki).fetchone()
-        print(tekm[0])
-        return Tekmovalec(ime=tekm[0])
+        return tekm
 
     @staticmethod
     def poisci_po_imenu(ime, limit=None):
@@ -122,7 +122,7 @@ class Leta:
         ORDER BY leto DESC'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
-            yield Leta(poizvedba[0])
+            yield poizvedba[0]
 
 
 class Discipline:
@@ -155,11 +155,19 @@ class Poddiscipline:
     @staticmethod
     def pridobi_vse_poddiscipline():
         sql = '''
-                SELECT ime FROM poddisciplina
+                SELECT DISTINCT id, ime FROM poddisciplina
                 ORDER BY ime'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
-            yield poizvedba[0]
+            yield poizvedba
+
+    @staticmethod
+    def pridobi_poddisciplino(id):
+        sql = '''
+        SELECT ime FROM poddisciplina
+        WHERE id={}'''.format(id)
+        poizvedbe = conn.execute(sql).fetchall()
+        return poizvedbe[0][0]
 
 class Rezultati:
 
@@ -177,11 +185,12 @@ class Rezultati:
     @staticmethod
     def pridobi_rezultate(leto, poddisciplina):
         sql = '''
-        SELECT ime.tekmovalec, leto.rezultat, disciplina.rezultat, ime.drzava, mesto.rezultat, rezultat.rezultat
+        SELECT tekmovalec.ime, rezultat.leto, poddisciplina.ime, drzava.ime, rezultat.mesto, rezultat.rezultat
         FROM rezultat
-        JOIN tekmovalec ON id.tekmovalec = tekmovalec.rezultat
-        JOIN drzava ON kratica.drzava = drzava.rezultat
-        WHERE leto.rezultat={} AND disciplina.rezultat={}'''.format(leto, poddisciplina)
+        JOIN tekmovalec ON tekmovalec.id = rezultat.tekmovalec
+        JOIN poddisciplina ON poddisciplina.id = rezultat.disciplina
+        JOIN drzava ON drzava.kratica = rezultat.drzava
+        WHERE rezultat.leto={} AND rezultat.disciplina={}'''.format(leto, poddisciplina)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -189,9 +198,10 @@ class Rezultati:
     @staticmethod
     def pridobi_rezultate_iz_id(id):
         sql = '''
-        SELECT tekmovalec.ime, rezultat.leto, rezultat.disciplina, drzava.ime, rezultat.mesto, rezultat.rezultat
+        SELECT tekmovalec.ime, rezultat.leto, poddisciplina.ime, drzava.ime, rezultat.mesto, rezultat.rezultat
         FROM rezultat
         JOIN tekmovalec ON tekmovalec.id = rezultat.tekmovalec
+        JOIN poddisciplina ON poddisciplina.id = rezultat.disciplina
         JOIN drzava ON drzava.kratica = rezultat.drzava
         WHERE rezultat.tekmovalec={}'''.format(id)
         poizvedbe = conn.execute(sql).fetchall()

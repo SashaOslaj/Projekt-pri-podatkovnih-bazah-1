@@ -1,11 +1,9 @@
 % rebase('base.html', title=name)
-<h2>Rezultati {{name}}</h2>
+<h2>Rezultati {{name}}, {{drzava}}</h2>
 
 <table class="table">
     <thead>
     <tr>
-      <th scope="col">Drzava</th>
-      <th scope="col">Ime</th>
       <th scope="col">Uvrstitev</th>
       <th scope="col">Čas</th>
       <th scope="col">Leto</th>
@@ -13,10 +11,8 @@
     </tr>
   </thead>
   <tbody>
-    % for ime, leto, disciplina, drzava, mesto, rezultat in poizvedbe:
+    % for ime, leto, disciplina, d, mesto, rezultat in poizvedbe:
     <tr>
-        <td>{{drzava}}</td>
-        <td>{{ime}}</td>
         <td>{{mesto}}</td>
         <td>{{rezultat}}</td>
         <td>{{leto}}</td>

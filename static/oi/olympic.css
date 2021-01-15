@@ -16,15 +16,15 @@ h1 {
   text-transform: uppercase;
 }
 
-#alignment {
+.alignment {
   position: center;
   top: 50%;
   left: 50%;
 }
 
-#results-button {
+.results-button {
   margin-top: 25px;
-  background-color: #7A619C;
+  background-color: deepskyblue;
 }
 
 .dropdown-menu {
