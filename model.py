@@ -136,11 +136,11 @@ class Discipline:
     @staticmethod
     def pridobi_vse_discipline():
         sql = '''
-                SELECT ime FROM disciplina
+                SELECT id, ime FROM disciplina
                 ORDER BY ime'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
-            yield Discipline(poizvedba[0])
+            yield poizvedba
 
 
 class Poddiscipline:
@@ -157,6 +157,15 @@ class Poddiscipline:
         sql = '''
                 SELECT DISTINCT id, ime FROM poddisciplina
                 ORDER BY ime'''
+        poizvedbe = conn.execute(sql).fetchall()
+        for poizvedba in poizvedbe:
+            yield poizvedba
+
+    @staticmethod
+    def pridobi_poddisciplino_id_disc(id_disc):
+        sql = '''
+            SELECT id, ime FROM poddisciplina
+            WHERE disciplina={}'''.format(id_disc)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
