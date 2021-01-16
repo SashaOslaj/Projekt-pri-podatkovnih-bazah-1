@@ -50,7 +50,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        ORDER BY ime'''
+        ORDER BY ime;'''
         yield from Tekmovalec.poisci_sql(sql)
 
     @staticmethod
@@ -58,7 +58,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.ime LIKE ?'''
+        WHERE tekmovalec.ime LIKE ?;'''
         podatki = ['%' + ime + '%']
         if limit:
             sql += ' LIMIT ?'
@@ -70,7 +70,7 @@ class Tekmovalec:
         sql = '''
             SELECT tekmovalec.ime, drzava.ime FROM tekmovalec
             JOIN drzava ON tekmovalec.drzava = drzava.kratica
-            WHERE tekmovalec.id=?'''
+            WHERE tekmovalec.id=?;'''
         podatki = [id]
         tekm = conn.execute(sql, podatki).fetchone()
         return tekm
@@ -80,7 +80,7 @@ class Tekmovalec:
         sql = '''
             SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
             JOIN drzava ON tekmovalec.drzava = drzava.kratica
-            WHERE tekmovalec.ime LIKE ?'''
+            WHERE tekmovalec.ime LIKE ?;'''
         podatki = ['%' + ime + '%']
         if limit:
             sql += ' LIMIT ?'
@@ -95,7 +95,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.drzava LIKE ?'''.format(k)
+        WHERE tekmovalec.drzava LIKE ?;'''.format(k)
         yield from Tekmovalec.poisci_sql(sql, ['%' + k + '%'])
 
     @staticmethod
@@ -103,7 +103,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.rojen LIKE ?'''
+        WHERE tekmovalec.rojen LIKE ?;'''
         yield from Tekmovalec.poisci_sql(sql, [str(leto) + '-%'])
 
 
@@ -119,7 +119,7 @@ class Leta:
     def pridobi_vsa_leta():
         sql = '''
         SELECT leto FROM olimpijskeIgre
-        ORDER BY leto DESC'''
+        ORDER BY leto DESC;'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba[0]
@@ -137,7 +137,7 @@ class Discipline:
     def pridobi_vse_discipline():
         sql = '''
                 SELECT id, ime FROM disciplina
-                ORDER BY ime'''
+                ORDER BY ime;'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -156,7 +156,7 @@ class Poddiscipline:
     def pridobi_vse_poddiscipline():
         sql = '''
                 SELECT DISTINCT id, ime FROM poddisciplina
-                ORDER BY ime'''
+                ORDER BY ime;'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -165,7 +165,7 @@ class Poddiscipline:
     def pridobi_poddisciplino_id_disc(id_disc):
         sql = '''
             SELECT id, ime FROM poddisciplina
-            WHERE disciplina={}'''.format(id_disc)
+            WHERE disciplina={};'''.format(id_disc)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -174,7 +174,7 @@ class Poddiscipline:
     def pridobi_poddisciplino(id):
         sql = '''
         SELECT ime FROM poddisciplina
-        WHERE id={}'''.format(id)
+        WHERE id={};'''.format(id)
         poizvedbe = conn.execute(sql).fetchall()
         return poizvedbe[0][0]
 
@@ -199,7 +199,7 @@ class Rezultati:
         JOIN tekmovalec ON tekmovalec.id = rezultat.tekmovalec
         JOIN poddisciplina ON poddisciplina.id = rezultat.disciplina
         JOIN drzava ON drzava.kratica = rezultat.drzava
-        WHERE rezultat.leto={} AND rezultat.disciplina={}'''.format(leto, poddisciplina)
+        WHERE rezultat.leto={} AND rezultat.disciplina={};'''.format(leto, poddisciplina)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -212,7 +212,8 @@ class Rezultati:
         JOIN tekmovalec ON tekmovalec.id = rezultat.tekmovalec
         JOIN poddisciplina ON poddisciplina.id = rezultat.disciplina
         JOIN drzava ON drzava.kratica = rezultat.drzava
-        WHERE rezultat.tekmovalec={}'''.format(id)
+        WHERE rezultat.tekmovalec={}
+        ORDER BY rezultat.leto DESC, rezultat.mesto ASC;'''.format(id)
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:
             yield poizvedba
@@ -231,11 +232,11 @@ class Uporabnik:
         if self.geslo is None:
             sql = '''
                     SELECT * FROM uporabnik
-                    WHERE uporabniskoIme="{}"'''.format(self.uporabniskoIme)
+                    WHERE uporabniskoIme="{}";'''.format(self.uporabniskoIme)
         else:
             sql = '''
             SELECT * FROM uporabnik
-            WHERE uporabniskoIme="{}" AND geslo="{}"'''.format(self.uporabniskoIme, self.geslo)
+            WHERE uporabniskoIme="{}" AND geslo="{}";'''.format(self.uporabniskoIme, self.geslo)
         poizvedba = conn.execute(sql)
         if poizvedba.fetchone():
             return poizvedba
@@ -243,7 +244,20 @@ class Uporabnik:
 
     def vstaviUporabnika(self):
         sql = '''
-        INSERT INTO uporabnik (uporabniskoIme, geslo) VALUES ("{}","{}")'''.format(self.uporabniskoIme, self.geslo)
+        INSERT INTO uporabnik (uporabniskoIme, geslo) VALUES ("{}","{}");'''.format(self.uporabniskoIme, self.geslo)
         conn.execute(sql)
         conn.commit()
+
+class Uredi:
+
+    def __init__(self, uporabnik):
+        self.uporabnik = uporabnik
+
+    def __str__(self):
+        return self.uporabnik
+
+    @staticmethod
+    def dodaj_tekmovalca():
+        # TODO
+        return None
 

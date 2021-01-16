@@ -12,19 +12,21 @@ def password_md5(s):
     h.update(s.encode('utf-8'))
     return h.hexdigest()
 
+secret = "to skrivnost je zelo tezko uganiti 1094107c907cw982982c42"
+
 def get_user():
     """Poglej cookie in ugotovi, kdo je prijavljeni uporabnik,
        vrni njegov username in ime. Če ni prijavljen, presumeri
        na stran za prijavo ali vrni None (advisno od auto_login).
     """
     # Dobimo username iz piškotka
-    username = request.get_cookie('username')
+    uporabniskoIme = request.get_cookie('uporabniskoIme', secret=secret)
     # Preverimo, ali ta uporabnik obstaja
-    if username is not None:
-        r = model.Uporabnik(username).jeUporabnik()
+    if uporabniskoIme is not None:
+        r = model.Uporabnik(uporabniskoIme).jeUporabnik()
         if r is not None:
             # uporabnik obstaja, vrnemo njegove podatke
-            return username
+            return uporabniskoIme
     # Če pridemo do sem, uporabnik ni prijavljen, naredimo redirect
     else:
         return None
@@ -38,7 +40,7 @@ def static(filename):
 
 @get('/')
 def osnovna_stran():
-    return template('home.html')
+    return template('home.html', user=get_user())
 
 @get('/login')
 def login():
@@ -48,17 +50,17 @@ def login():
 def login_post():
     '''Obdelaj izpolnjeno formo za prijavo'''
     # Uporabniško ime, ki ga je uporabnik vpisal v formo
-    uporabniskoIme = request.forms.username
+    uporabniskoIme = request.forms.uporabniskoIme
     # Izračunamo MD5 has gesla, ki ga bomo spravili
-    geslo = password_md5(request.forms.password)
+    geslo = password_md5(request.forms.geslo)
     # Preverimo, ali se je uporabnik pravilno prijavil
     poizvedba = model.Uporabnik(uporabniskoIme, geslo).jeUporabnik()
     if poizvedba is None:
         # Uporabnisko ime in geslo se ne ujemata
-        return  template('login.html', napaka='Uporabnik ne obstaja.')
+        return template('login.html', napaka='Uporabnik ne obstaja.')
     else:
         # Vse je vredu, nastavimo
-        response.set_cookie('uporabniskoIme', uporabniskoIme, path='/')
+        response.set_cookie('uporabniskoIme', uporabniskoIme, path='/', secret=secret)
         redirect('/')
 
 @get('/logout')
@@ -69,24 +71,24 @@ def logout():
 
 @get('/register')
 def register():
-    return template('register.html', username=None, napaka=None)
+    return template('register.html', uporabniskoIme=None, napaka=None)
 
 @post('/register')
 def register_post():
     print('trying to register')
     '''Registriraj novega uporabnika.'''
-    uporabniskoIme = request.forms.username
-    geslo1 = request.forms.password1
-    geslo2 = request.forms.password2
+    uporabniskoIme = request.forms.uporabniskoIme
+    geslo1 = request.forms.geslo1
+    geslo2 = request.forms.geslo2
     poizvedba = model.Uporabnik(uporabniskoIme=uporabniskoIme).jeUporabnik()
     if poizvedba:
         print('Uporabnisko ime ze obstaja')
         # Uporabnisko ime ze obstaja
-        return template('register.html', username=uporabniskoIme, napaka='To uporabnisko ime ze obstaja.')
+        return template('register.html', uporabniskoIme=uporabniskoIme, napaka='To uporabnisko ime ze obstaja.')
     elif not geslo1 == geslo2:
         print('gesli se ne ujemata')
         # Gesli se ne ujemata
-        return template('register.html', username=uporabniskoIme, napaka='Gesli se ne ujemata.')
+        return template('register.html', uporabniskoIme=uporabniskoIme, napaka='Gesli se ne ujemata.')
     else:
         # Vse je vredu, vstavi novega uporabnika v bazo
         print('ustvarjamo novega uporabnika')
@@ -95,38 +97,47 @@ def register_post():
         model.Uporabnik(uporabniskoIme, geslo).vstaviUporabnika()
         
         # Dodaj uporabniku cookie
-        response.set_cookie('uporabniskoIme', uporabniskoIme, path='/')
+        response.set_cookie('uporabniskoIme', uporabniskoIme, path='/', secret=secret)
         redirect('/')
 
 @get('/athletes')
 def poisci_tekmovalca():
-    return template('izberi_tekmovalca.html')
+    return template('izberi_tekmovalca.html', user=get_user())
 
 @get('/athlete/<id>')
 def vrni_po_id(id):
     print()
     ime, drzava = model.Tekmovalec.poisci_po_id(id)
-    return template('tekmovalci.html', name=ime, drzava=drzava, poizvedbe=model.Rezultati.pridobi_rezultate_iz_id(id))
+    return template('tekmovalci.html', user=get_user(), name=ime, drzava=drzava, poizvedbe=model.Rezultati.pridobi_rezultate_iz_id(id))
 
 @get('/country/<drzava>')
 def vrni_po_drzavi(drzava):
-    return template('tekmovalci.html', name=drzava, poizvedbe=model.Tekmovalec.poisci_po_drzavi(drzava))
+    return template('tekmovalci.html', user=get_user(), name=drzava, poizvedbe=model.Tekmovalec.poisci_po_drzavi(drzava))
 
 @get('/year/<letnica:int>')
 def vrni_po_letnici(letnica):
-    return template('tekmovalci.html', name=letnica, poizvedbe=model.Tekmovalec.poisci_po_letnici(letnica))
+    return template('tekmovalci.html', user=get_user(), name=letnica, poizvedbe=model.Tekmovalec.poisci_po_letnici(letnica))
 
 @get('/results')
 def poisci_rezultat():
-    return template('rezultati.html',
+    return template('rezultati.html', user=get_user(),
                     leta=model.Leta.pridobi_vsa_leta(),
                     discipline=model.Discipline.pridobi_vse_discipline(),
                     poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
 
 @get('/results/<letnica:int>/<poddisciplina:int>')
 def vrni_rezultate(letnica, poddisciplina):
-    return template('izpis_rezultatov.html', l=letnica, pd=model.Poddiscipline.pridobi_poddisciplino(poddisciplina),
+    return template('izpis_rezultatov.html', user=get_user(), l=letnica, pd=model.Poddiscipline.pridobi_poddisciplino(poddisciplina),
                     poizvedbe=model.Rezultati.pridobi_rezultate(letnica, poddisciplina))
+
+@get('/uredi')
+def uredi():
+    return template('uredi.html', user=get_user())
+
+@post('/uredi')
+def uredi_post():
+    # TODO
+    return None
 
 @get('/autocomplete/athletes')
 def autocomplete_athletes():

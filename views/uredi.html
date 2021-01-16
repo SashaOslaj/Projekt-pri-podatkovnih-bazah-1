@@ -1,0 +1,48 @@
+% rebase('base.html', title='Uredi', uporabniskoIme=user)
+
+<p>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">DODAJ</button>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">ODSTRANI</button>
+</p>
+<div class="column">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+      <div class="card card-body">
+        <form class="form-group" method="post">
+          <label for="imeTekmovalca" class="sr-only">Navedi ime tekmmovalca</label>
+          <input type="imeTekmovalca" id="imeTekmovalca" class="form-control" placeholder="Ime tekmovalca" name="imeTekmovalca" required autofocus>
+          <label for="rojDan" class="sr-only">Navedi rojstni dan</label>
+          <input type="rojDan" id="rojDan" class="form-control" placeholder="Rojstni dan" name="rojDan" required>
+          <label for="drzava" class="sr-only">Navedi drzavo, kratico drzave iz katere prihaja tekmovalec</label>
+          <input type="drzava" id="drzava" class="form-control" placeholder="Drzava, kratica" name="drzava" required>
+          <label for="leto" class="sr-only">Navedi leto olimpijskih iger</label>
+          <input type="leto" id="leto" class="form-control" placeholder="Leto" name="leto" required>
+          <label for="disciplina" class="sr-only">Navedi disciplino, v kateri je nastopil tekmovalec</label>
+          <input type="disciplina" id="disciplina" class="form-control" placeholder="Disciplina" name="disciplina" required>
+          <label for="poddisciplina" class="sr-only">Navedi poddisciplino, v kateri je nastopil tekmovalec</label>
+          <input type="poddisciplina" id="poddisciplina" class="form-control" placeholder="Poddisciplina" name="poddisciplina" required>
+          <label for="mesto" class="sr-only">Navedi, na katerem mestu je bil tekmovalec</label>
+          <input type="mesto" id="mesto" class="form-control" placeholder="Mesto" name="mesto" required>
+          <label for="rezultat" class="sr-only">Navedi, kakšen rezultat je dosegel tekmovalec</label>
+          <input type="rezultat" id="rezultat" class="form-control" placeholder="Rezultat" name="rezultat" required>
+          <button class="btn btn-lg btn-primary btn-block" type="submit" id="dodajButton">Dodaj</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample2">
+      <div class="card card-body">
+        <form class="form-group" method="post">
+         <label for="ime" class="sr-only">Navedi ime tekmmovalca</label>
+         <input type="ime" id="ime" class="form-control" placeholder="Ime tekmovalca" name="ime" required autofocus>
+         <label for="letoTekmovanja" class="sr-only">Navedi leto olimpijskih iger</label>
+         <input type="letoTekmovanja" id="letoTekmovanja" class="form-control" placeholder="Leto" name="letoTekmovanja" required>
+         <label for="razlog" class="sr-only">Navedi razlog diskvalifikacije</label>
+         <input type="razlog" id="razlog" class="form-control" placeholder="Razlog" name="razlog" required autofocus>
+         <button class="btn btn-lg btn-primary btn-block" type="submit" id="odstraniButton">Odstrani</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

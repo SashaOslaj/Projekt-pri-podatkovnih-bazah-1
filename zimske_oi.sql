@@ -34,7 +34,7 @@ CREATE TABLE poddisciplina (
 -- Table: popravi
 CREATE TABLE popravi (
     uporabnik  TEXT REFERENCES uporabnik (uporabniskoIme),
-    tekmovalec TEXT REFERENCES tekmovalec (id),
+    tekmovalec INT  REFERENCES tekmovalec (id),
     kajNaredi  TEXT NOT NULL,
     razlog     TEXT NOT NULL
 );
