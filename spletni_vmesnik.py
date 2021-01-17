@@ -122,7 +122,7 @@ def vrni_po_letnici(letnica):
 def poisci_rezultat():
     return template('rezultati.html', user=get_user(),
                     leta=model.Leta.pridobi_vsa_leta(),
-                    discipline=model.Discipline.pridobi_vse_discipline(),
+                    discipline=list(model.Discipline.pridobi_vse_discipline()),
                     poddiscipline=model.Poddiscipline.pridobi_vse_poddiscipline())
 
 @get('/results/<letnica:int>/<poddisciplina:int>')
