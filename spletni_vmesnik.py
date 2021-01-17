@@ -136,7 +136,9 @@ def uredi():
 
 @post('/uredi')
 def uredi_post():
+
     uporabnik=get_user()
+
     imeTekmovalca = request.forms.imeTekmovalca
     rojDan = request.forms.rojDan
     drzava = request.forms.drzava
@@ -145,8 +147,20 @@ def uredi_post():
     poddisciplina = request.forms.poddisciplina
     mesto = request.forms.mesto
     rezultat = request.forms.rezultat
-    model.Uredi.dodaj_tekmovalca(imeTekmovalca, rojDan, drzava, leto, disciplina, poddisciplina, mesto, rezultat)
-    model.Uredi.zabelezi_dodajanje(uporabnik, imeTekmovalca, rojDan, drzava)
+
+    idTekmovalca = request.forms.idTekmovalca
+    letoTekmovanja = request.forms.letoTekmovanja
+    razlog = request.forms.razlog
+
+    if imeTekmovalca:
+        print("dodaj")
+        model.Uredi.dodaj_tekmovalca(imeTekmovalca, rojDan, drzava, leto, disciplina, poddisciplina, mesto, rezultat)
+        model.Uredi.zabelezi_dodajanje(uporabnik, imeTekmovalca, rojDan, drzava)
+    else:
+        print("odstrani")
+        model.Uredi.odstraniRezultat(idTekmovalca, letoTekmovanja)
+        model.Uredi.zabelezi_odstranitev(uporabnik, idTekmovalca, razlog)
+
     redirect('/uredi')
 
 

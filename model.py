@@ -246,8 +246,9 @@ class Uredi:
 
     @staticmethod
     def zabelezi_dodajanje(uporabnik, ime, rojDan, drzava):
+        rojDan = rojDan.replace(".", "-")
         tekmovalec_drzava, tekmovalec_kratica = tuple(drzava.split(","))
-        tekmovalec_kratica.replace(' ', '')
+        tekmovalec_kratica = tekmovalec_kratica[1:]
         id_tekmovalca = Uredi.idTekmovalca(ime, rojDan, tekmovalec_drzava, tekmovalec_kratica)
         kajNaredil = "Dodal"
         razlog = "Je tekmoval in prišel do konca."
@@ -259,18 +260,18 @@ class Uredi:
 
     @staticmethod
     def dodaj_tekmovalca(ime, rojDan, drzava, leto, disciplina, poddisciplina, mesto, rezultat):
+        rojDan = rojDan.replace(".", "-")
         tekmovalec_drzava, tekmovalec_kratica = tuple(drzava.split(","))
-        tekmovalec_kratica.replace(' ', '')
-        oi_leto, oi_drzava, oi_kratca = tuple(leto.split(','))
+        tekmovalec_kratica = tekmovalec_kratica[1:]
+        oi_leto, oi_drzava, oi_kratica = tuple(leto.split(','))
         oi_drzava = oi_drzava[1:]
-        oi_kratca.replace(' ', '')
-        Uredi.dodajLeto(oi_leto, oi_drzava, oi_kratca)
+        oi_kratica = oi_kratica[1:]
+        Uredi.dodajLeto(oi_leto, oi_drzava, oi_kratica)
         id_poddiscipline = Uredi.idPoddisciplina(disciplina, poddisciplina)
         id_tekmovalca = Uredi.idTekmovalca(ime, rojDan, tekmovalec_drzava, tekmovalec_kratica)
-        mesto = int(mesto)
         sql = '''
         INSERT INTO rezultat (leto, disciplina, tekmovalec, drzava, mesto, rezultat) 
-        VALUES ({}, {}, {}, "{}", {}, "{}")'''.format(oi_leto, id_poddiscipline, id_tekmovalca, tekmovalec_kratica, mesto, rezultat)
+        VALUES ({}, {}, {}, "{}", {}, "{}")'''.format(int(oi_leto), id_poddiscipline, id_tekmovalca, tekmovalec_kratica, int(mesto), rezultat)
         conn.execute(sql)
         conn.commit()
 
@@ -291,7 +292,7 @@ class Uredi:
         SELECT id FROM poddisciplina
         WHERE ime="{}"'''.format(poddisciplina)
         id = conn.execute(sql3).fetchone()
-        return id
+        return id[0]
 
 
     @staticmethod
@@ -310,7 +311,7 @@ class Uredi:
         SELECT id FROM disciplina
         WHERE ime="{}"'''.format(disciplina)
         id = conn.execute(sql3).fetchone()
-        return id
+        return id[0]
 
     @staticmethod
     def idTekmovalca(ime, rojDan, drzava, kratica):
@@ -322,14 +323,15 @@ class Uredi:
             Uredi.dodajDrzavo(drzava, kratica)
             sql2 = '''
             INSERT INTO tekmovalec (ime, rojen, drzava) 
-            VALUES ("{}",{},"{}")'''.format(ime, rojDan, kratica)
+            VALUES ("{}","{}","{}")'''.format(ime, rojDan, kratica)
+            print(sql2)
             conn.execute(sql2)
             conn.commit()
         sql3 = '''
         SELECT id FROM tekmovalec
-        WHERE ime="{}" AND rojen={}'''.format(ime, rojDan)
+        WHERE ime="{}" AND rojen="{}"'''.format(ime, rojDan)
         id = conn.execute(sql3).fetchone()
-        return id
+        return id[0]
 
     @staticmethod
     def dodajDrzavo(drzava, kratica):
@@ -346,6 +348,7 @@ class Uredi:
 
     @staticmethod
     def dodajLeto(leto, drzava, kratica):
+        leto = int(leto)
         sql1 = '''
         SELECT leto 
         FROM olimpijskeIgre;'''
@@ -362,6 +365,47 @@ class Uredi:
             VALUES ({}, "{}")'''.format(leto, kratica)
             conn.execute(sql3)
             conn.commit()
+
+    @staticmethod
+    def odstraniRezultat(id_tekmovalca, leto):
+        leto = int(leto)
+        id_tekmovalca = int(id_tekmovalca)
+        sql1 = '''
+        SELECT disciplina, mesto FROM rezultat
+        WHERE tekmovalec={} AND leto={};'''.format(id_tekmovalca, leto)
+        discipline = conn.execute(sql1).fetchall()
+        for disciplina, mesto1 in discipline:
+            sql2 = '''
+            SELECT id, mesto FROM rezultat
+            WHERE leto={} AND disciplina="{}" AND mesto>{}'''.format(leto, disciplina, mesto1)
+            poizvedbe = conn.execute(sql2).fetchall()
+            for id, mesto2 in poizvedbe:
+                mesto2 = mesto2 - 1
+                sql3 = '''
+                UPDATE rezultat
+                SET mesto={}
+                WHERE id={};'''.format(mesto2, id)
+                conn.execute(sql3)
+                conn.commit()
+        sql4 = '''
+        DELETE FROM rezultat 
+        WHERE tekmovalec={} AND leto={}'''.format(id_tekmovalca, leto)
+        conn.execute(sql4)
+        conn.commit()
+
+
+    @staticmethod
+    def zabelezi_odstranitev(uporabnik, id_tekmovalca, razlog):
+        id_tekmovalca = int(id_tekmovalca)
+        kajNaredil = "Odstranil"
+        sql = '''
+        INSERT INTO popravi (uporabnik, tekmovalec, kajNaredi, razlog)
+        VALUES ("{}",{},"{}","{}")'''.format(uporabnik, id_tekmovalca, kajNaredil, razlog)
+        conn.execute(sql)
+        conn.commit()
+
+
+
 
 
 
