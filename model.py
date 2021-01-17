@@ -50,7 +50,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        ORDER BY ime;'''
+        ORDER BY ime'''
         yield from Tekmovalec.poisci_sql(sql)
 
     @staticmethod
@@ -58,7 +58,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.ime LIKE ?;'''
+        WHERE tekmovalec.ime LIKE ?'''
         podatki = ['%' + ime + '%']
         if limit:
             sql += ' LIMIT ?'
@@ -70,22 +70,10 @@ class Tekmovalec:
         sql = '''
             SELECT tekmovalec.ime, drzava.ime FROM tekmovalec
             JOIN drzava ON tekmovalec.drzava = drzava.kratica
-            WHERE tekmovalec.id=?;'''
+            WHERE tekmovalec.id=?'''
         podatki = [id]
         tekm = conn.execute(sql, podatki).fetchone()
         return tekm
-
-    @staticmethod
-    def poisci_po_imenu(ime, limit=None):
-        sql = '''
-            SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
-            JOIN drzava ON tekmovalec.drzava = drzava.kratica
-            WHERE tekmovalec.ime LIKE ?;'''
-        podatki = ['%' + ime + '%']
-        if limit:
-            sql += ' LIMIT ?'
-            podatki.append(limit)
-        yield from Tekmovalec.poisci_sql(sql, podatki)
 
     @staticmethod
     def poisci_po_drzavi(drzava):
@@ -95,7 +83,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.drzava LIKE ?;'''.format(k)
+        WHERE tekmovalec.drzava LIKE ?'''
         yield from Tekmovalec.poisci_sql(sql, ['%' + k + '%'])
 
     @staticmethod
@@ -103,7 +91,7 @@ class Tekmovalec:
         sql = '''
         SELECT tekmovalec.ime, tekmovalec.rojen, drzava.ime, tekmovalec.id FROM tekmovalec
         JOIN drzava ON tekmovalec.drzava = drzava.kratica
-        WHERE tekmovalec.rojen LIKE ?;'''
+        WHERE tekmovalec.rojen LIKE ?'''
         yield from Tekmovalec.poisci_sql(sql, [str(leto) + '-%'])
 
 
@@ -250,14 +238,131 @@ class Uporabnik:
 
 class Uredi:
 
-    def __init__(self, uporabnik):
+    def __init__(self, uporabnik=None):
         self.uporabnik = uporabnik
 
     def __str__(self):
         return self.uporabnik
 
     @staticmethod
-    def dodaj_tekmovalca():
-        # TODO
-        return None
+    def zabelezi_dodajanje(uporabnik, ime, rojDan, drzava):
+        tekmovalec_drzava, tekmovalec_kratica = tuple(drzava.split(","))
+        tekmovalec_kratica.replace(' ', '')
+        id_tekmovalca = Uredi.idTekmovalca(ime, rojDan, tekmovalec_drzava, tekmovalec_kratica)
+        kajNaredil = "Dodal"
+        razlog = "Je tekmoval in prišel do konca."
+        sql = '''
+        INSERT INTO popravi (uporabnik, tekmovalec, kajNaredi, razlog)
+        VALUES ("{}",{},"{}","{}")'''.format(uporabnik, id_tekmovalca, kajNaredil, razlog)
+        conn.execute(sql)
+        conn.commit()
+
+    @staticmethod
+    def dodaj_tekmovalca(ime, rojDan, drzava, leto, disciplina, poddisciplina, mesto, rezultat):
+        tekmovalec_drzava, tekmovalec_kratica = tuple(drzava.split(","))
+        tekmovalec_kratica.replace(' ', '')
+        oi_leto, oi_drzava, oi_kratca = tuple(leto.split(','))
+        oi_drzava = oi_drzava[1:]
+        oi_kratca.replace(' ', '')
+        Uredi.dodajLeto(oi_leto, oi_drzava, oi_kratca)
+        id_poddiscipline = Uredi.idPoddisciplina(disciplina, poddisciplina)
+        id_tekmovalca = Uredi.idTekmovalca(ime, rojDan, tekmovalec_drzava, tekmovalec_kratica)
+        mesto = int(mesto)
+        sql = '''
+        INSERT INTO rezultat (leto, disciplina, tekmovalec, drzava, mesto, rezultat) 
+        VALUES ({}, {}, {}, "{}", {}, "{}")'''.format(oi_leto, id_poddiscipline, id_tekmovalca, tekmovalec_kratica, mesto, rezultat)
+        conn.execute(sql)
+        conn.commit()
+
+    @staticmethod
+    def idPoddisciplina(disciplina,poddisciplina):
+        sql1 = '''
+        SELECT ime 
+        FROM poddisciplina;'''
+        poddiscipline = conn.execute(sql1).fetchall()
+        if (poddisciplina,) not in poddiscipline:
+            id_discipline = Uredi.idDisciplina(disciplina)
+            sql2 = '''
+            INSERT INTO poddisciplina (ime, disciplina) 
+            VALUES ("{}",{})'''.format(poddisciplina, id_discipline)
+            conn.execute(sql2)
+            conn.commit()
+        sql3 = '''
+        SELECT id FROM poddisciplina
+        WHERE ime="{}"'''.format(poddisciplina)
+        id = conn.execute(sql3).fetchone()
+        return id
+
+
+    @staticmethod
+    def idDisciplina(disciplina):
+        sql1 = '''
+        SELECT ime 
+        FROM disciplina;'''
+        discipline = conn.execute(sql1).fetchall()
+        if (disciplina,) not in discipline:
+            sql2 = '''
+            INSERT INTO disciplina (ime) 
+            VALUES ("{}")'''.format(disciplina)
+            conn.execute(sql2)
+            conn.commit()
+        sql3 = '''
+        SELECT id FROM disciplina
+        WHERE ime="{}"'''.format(disciplina)
+        id = conn.execute(sql3).fetchone()
+        return id
+
+    @staticmethod
+    def idTekmovalca(ime, rojDan, drzava, kratica):
+        sql1 = '''
+        SELECT ime 
+        FROM tekmovalec;'''
+        tekmovalci = conn.execute(sql1).fetchall()
+        if (ime,) not in tekmovalci:
+            Uredi.dodajDrzavo(drzava, kratica)
+            sql2 = '''
+            INSERT INTO tekmovalec (ime, rojen, drzava) 
+            VALUES ("{}",{},"{}")'''.format(ime, rojDan, kratica)
+            conn.execute(sql2)
+            conn.commit()
+        sql3 = '''
+        SELECT id FROM tekmovalec
+        WHERE ime="{}" AND rojen={}'''.format(ime, rojDan)
+        id = conn.execute(sql3).fetchone()
+        return id
+
+    @staticmethod
+    def dodajDrzavo(drzava, kratica):
+        sql1 = '''
+        SELECT kratica 
+        FROM drzava;'''
+        kratice = conn.execute(sql1).fetchall()
+        if (kratica,) not in kratice:
+            sql2 = '''
+            INSERT INTO drzava (kratica, ime) 
+            VALUES ("{}", "{}")'''.format(kratica, drzava)
+            conn.execute(sql2)
+            conn.commit()
+
+    @staticmethod
+    def dodajLeto(leto, drzava, kratica):
+        sql1 = '''
+        SELECT leto 
+        FROM olimpijskeIgre;'''
+        leta = conn.execute(sql1).fetchall()
+        sql2 = '''
+        SELECT kratica 
+        FROM drzava;'''
+        kratice = conn.execute(sql2).fetchall()
+        if (leto,) not in leta:
+            if (kratica,) not in kratice:
+                Uredi.dodajDrzavo(drzava, kratica)
+            sql3 = '''
+            INSERT INTO olimpijskeIgre (leto, drzava) 
+            VALUES ({}, "{}")'''.format(leto, kratica)
+            conn.execute(sql3)
+            conn.commit()
+
+
+
 

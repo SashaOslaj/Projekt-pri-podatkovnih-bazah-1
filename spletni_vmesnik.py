@@ -136,8 +136,19 @@ def uredi():
 
 @post('/uredi')
 def uredi_post():
-    # TODO
-    return None
+    uporabnik=get_user()
+    imeTekmovalca = request.forms.imeTekmovalca
+    rojDan = request.forms.rojDan
+    drzava = request.forms.drzava
+    leto = request.forms.leto
+    disciplina = request.forms.disciplina
+    poddisciplina = request.forms.poddisciplina
+    mesto = request.forms.mesto
+    rezultat = request.forms.rezultat
+    model.Uredi.dodaj_tekmovalca(imeTekmovalca, rojDan, drzava, leto, disciplina, poddisciplina, mesto, rezultat)
+    model.Uredi.zabelezi_dodajanje(uporabnik, imeTekmovalca, rojDan, drzava)
+    redirect('/uredi')
+
 
 @get('/autocomplete/athletes')
 def autocomplete_athletes():
