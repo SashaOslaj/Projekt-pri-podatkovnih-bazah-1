@@ -209,22 +209,27 @@ class Rezultati:
 
 class Uporabnik:
 
-    def __init__(self, uporabniskoIme, geslo=None):
+    def __init__(self, uporabniskoIme=None, geslo=None, licenca=None):
         self.uporabniskoIme = uporabniskoIme
         self.geslo = geslo
+        self.licenca = licenca
 
     def __str__(self):
         return self.uporabniskoIme
 
     def jeUporabnik(self):
-        if self.geslo is None:
-            sql = '''
-                    SELECT * FROM uporabnik
-                    WHERE uporabniskoIme="{}";'''.format(self.uporabniskoIme)
-        else:
-            sql = '''
-            SELECT * FROM uporabnik
-            WHERE uporabniskoIme="{}" AND geslo="{}";'''.format(self.uporabniskoIme, self.geslo)
+        sql = '''
+        SELECT * FROM uporabnik
+        WHERE uporabniskoIme="{}";'''.format(self.uporabniskoIme)
+        poizvedba = conn.execute(sql)
+        if poizvedba.fetchone():
+            return poizvedba
+        return None
+
+    def jeUporabljenaLicenca(self):
+        sql = '''
+        SELECT * FROM uporabnik
+        WHERE licenca="{}";'''.format(self.licenca)
         poizvedba = conn.execute(sql)
         if poizvedba.fetchone():
             return poizvedba
@@ -232,9 +237,20 @@ class Uporabnik:
 
     def vstaviUporabnika(self):
         sql = '''
-        INSERT INTO uporabnik (uporabniskoIme, geslo) VALUES ("{}","{}");'''.format(self.uporabniskoIme, self.geslo)
+        INSERT INTO uporabnik (uporabniskoIme, geslo, licenca) VALUES ("{}","{}", "{}");'''.format(self.uporabniskoIme, self.geslo, self.licenca)
         conn.execute(sql)
         conn.commit()
+
+    @staticmethod
+    def jePravaLicenca(licencna_st):
+        sql = '''
+        SELECT id FROM licenca
+        WHERE id="{}"'''.format(licencna_st)
+        poizvedba = conn.execute(sql).fetchone()
+        print(poizvedba)
+        if poizvedba:
+            return poizvedba[0]
+        return None
 
 class Uredi:
 

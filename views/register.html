@@ -5,10 +5,12 @@
       <h1 class="h3 mb-3 font-weight-normal">Registracija</h1>
       <label for="vstaviUporabniskoIme" class="sr-only">Uporabniško ime</label>
       <input type="uporabniskoIme" id="vstaviUporabniskoIme" class="form-control" placeholder="Uporabnisko ime" name="uporabniskoIme" required autofocus>
+      <label for="vstaviLicenco" class="sr-only">Licenca</label>
+      <input type="licenca" id="vstaviLicenco" class="form-control" placeholder="Licenca" name="licenca" required autofocus>
       <label for="vstaviGeslo1" class="sr-only">Geslo</label>
       <input type="password" id="vstaviGeslo1" class="form-control" placeholder="Geslo" name="geslo1" required>
       <label for="vstaviGeslo2" class="sr-only">Ponovno vnesite geslo</label>
-      <input type="possword" id="vstaviGeslo2" class="form-control" placeholder="Ponovno vnesite geslo" name="geslo2" required>
+      <input type="password" id="vstaviGeslo2" class="form-control" placeholder="Ponovno vnesite geslo" name="geslo2" required>
       %if napaka:
             <div class="alert alert-warning">{{napaka}}</div>
       %end

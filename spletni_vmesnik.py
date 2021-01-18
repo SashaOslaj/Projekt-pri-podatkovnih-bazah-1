@@ -78,27 +78,37 @@ def register_post():
     print('trying to register')
     '''Registriraj novega uporabnika.'''
     uporabniskoIme = request.forms.uporabniskoIme
+    licencna_st = request.forms.licenca
     geslo1 = request.forms.geslo1
     geslo2 = request.forms.geslo2
-    poizvedba = model.Uporabnik(uporabniskoIme=uporabniskoIme).jeUporabnik()
-    if poizvedba:
+    licenca = model.Uporabnik().jePravaLicenca(licencna_st)
+    poizvedba1 = model.Uporabnik(uporabniskoIme=uporabniskoIme).jeUporabnik()
+    poizvedba2 = model.Uporabnik(licenca=licencna_st).jeUporabljenaLicenca()
+    if poizvedba1:
         print('Uporabnisko ime ze obstaja')
         # Uporabnisko ime ze obstaja
         return template('register.html', uporabniskoIme=uporabniskoIme, napaka='To uporabnisko ime ze obstaja.')
-    elif not geslo1 == geslo2:
-        print('gesli se ne ujemata')
-        # Gesli se ne ujemata
-        return template('register.html', uporabniskoIme=uporabniskoIme, napaka='Gesli se ne ujemata.')
-    else:
-        # Vse je vredu, vstavi novega uporabnika v bazo
-        print('ustvarjamo novega uporabnika')
+    elif poizvedba2:
+        print('Licenca je ze uporabljena.')
+        # Licenca je ze uporabljena
+        return template('register.html', uporabniskoIme=uporabniskoIme, napaka='Ta licenca je ze uporabljena.')
+    elif licenca:
+        if not geslo1 == geslo2:
+            print('gesli se ne ujemata')
+            # Gesli se ne ujemata
+            return template('register.html', uporabniskoIme=uporabniskoIme, napaka='Gesli se ne ujemata.')
+        else:
+            # Vse je vredu, vstavi novega uporabnika v bazo
+            print('ustvarjamo novega uporabnika')
 
-        geslo = password_md5(geslo1)
-        model.Uporabnik(uporabniskoIme, geslo).vstaviUporabnika()
-        
-        # Dodaj uporabniku cookie
-        response.set_cookie('uporabniskoIme', uporabniskoIme, path='/', secret=secret)
-        redirect('/')
+            geslo = password_md5(geslo1)
+            model.Uporabnik(uporabniskoIme, geslo, licenca).vstaviUporabnika()
+
+            # Dodaj uporabniku cookie
+            response.set_cookie('uporabniskoIme', uporabniskoIme, path='/', secret=secret)
+            redirect('/')
+    else:
+        return template('register.html', uporabniskoIme=uporabniskoIme, napaka='Ta licenca ne obstaja.')
 
 @get('/athletes')
 def poisci_tekmovalca():

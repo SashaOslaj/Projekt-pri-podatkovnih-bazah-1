@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Sat Dec 26 17:15:15 2020
+-- File generated with SQLiteStudio v3.2.1 on Mon Jan 18 12:03:33 2021
 --
 -- Text encoding used: System
 --
@@ -18,6 +18,11 @@ CREATE TABLE drzava (
     ime     TEXT
 );
 
+-- Table: licenca
+CREATE TABLE licenca (
+  id TEXT PRIMARY KEY
+);
+
 -- Table: olimpijskeIgre
 CREATE TABLE olimpijskeIgre (
     leto   INT         PRIMARY KEY,
@@ -34,7 +39,7 @@ CREATE TABLE poddisciplina (
 -- Table: popravi
 CREATE TABLE popravi (
     uporabnik  TEXT REFERENCES uporabnik (uporabniskoIme),
-    tekmovalec INT  REFERENCES tekmovalec (id),
+    tekmovalec INT REFERENCES tekmovalec (id),
     kajNaredi  TEXT NOT NULL,
     razlog     TEXT NOT NULL
 );
@@ -61,7 +66,8 @@ CREATE TABLE tekmovalec (
 -- Table: uporabnik
 CREATE TABLE uporabnik (
     uporabniskoIme TEXT PRIMARY KEY,
-    geslo          TEXT
+    geslo          TEXT,
+    licenca        TEXT REFERENCES licenca(id)
 );
 
 COMMIT TRANSACTION;
