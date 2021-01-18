@@ -143,7 +143,7 @@ class Poddiscipline:
     @staticmethod
     def pridobi_vse_poddiscipline():
         sql = '''
-                SELECT DISTINCT id, ime FROM poddisciplina
+                SELECT DISTINCT id, ime, disciplina FROM poddisciplina
                 ORDER BY ime;'''
         poizvedbe = conn.execute(sql).fetchall()
         for poizvedba in poizvedbe:

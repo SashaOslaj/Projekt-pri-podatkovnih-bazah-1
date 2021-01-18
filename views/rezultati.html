@@ -7,19 +7,19 @@
         <div class="form-group">
             <label for="leto" class="sr-only" style="font-size: large; font-weight: bold;">Leto olimpijskih iger</label>
             <select class="form-control" id="leto">
-              <option selected> Izberi leto želenih olimpijskih iger </option>
+              <option selected value=""> Izberi leto želenih olimpijskih iger </option>
               % for leto in leta:
-              <option value="/{{leto}}"> {{leto}} </option>
+              <option value="{{leto}}"> {{leto}} </option>
               % end
             </select>
         </div>
 
         <div class="form-group">
             <label for="id_disciplina" class="sr-only" style="font-size: large; font-weight: bold;">Disciplina</label>
-            <select class="form-control" id="id_disciplina">
-              <option selected> Izberi disciplino </option>
+            <select class="form-control" id="id_disciplina" onchange="getPoddiscipline()">
+              <option selected value=""> Izberi disciplino </option>
               % for id_disciplina, disciplina in discipline:
-              <option value="/{{id_disciplina}}"> {{disciplina}} </option>
+              <option value="{{id_disciplina}}"> {{disciplina}} </option>
               % end
             </select>
         </div>
@@ -27,17 +27,7 @@
         <div class="form-group">
             <label for="id_poddisciplina" class="sr-only" style="font-size: large; font-weight: bold;">Poddisciplina</label>
             <select class="form-control" id="id_poddisciplina">
-            <option selected> Izberi poddisciplino </option>
-            <script type="select/javascript">
-                function getPoddiscipline() {
-                    disciplina = document.getElementById('disciplina');
-                    value_disciplina = disciplina.options[disciplina.selectedIndex].value;
-
-                    for (id_poddisciplina, poddisciplina in model.Poddiscipline.pridobi_poddisciplino_id_disc(value_disciplina)) {
-                    <option value="/{{id_poddisciplina}}"> {{poddisciplina}} </option>;
-                    }
-                }
-            </script>
+            <option selected value=""> Izberi poddisciplino </option>
             </select>
         </div>
 
@@ -49,12 +39,51 @@
               poddisciplina = document.getElementById('id_poddisciplina');
               value_poddisciplina = poddisciplina.options[poddisciplina.selectedIndex].value;
 
-              return "results" + value_leto + value_poddisciplina;
+              if (!value_leto || !value_poddisciplina) {
+                alert("Izberi leto in poddisciplino!");
+                return;
+              }
+
+              document.location.href = "results/" + value_leto + "/" + value_poddisciplina;
             }
         </script>
-        <a class="btn" style="background-color: deepskyblue; color: white; padding: 12px 28px;" id="results-button" href="javascript:document.location.href=getUrl();" role="button">Rezultati</a>
+        <a class="btn" style="background-color: deepskyblue; color: white; padding: 12px 28px;" id="results-button" href="javascript:getUrl();" role="button">Rezultati</a>
 
     </div>
   </div>
 </div>
 
+<script type="text/javascript">
+  var poddiscipline = {}
+  % for id_disciplina, disciplina in discipline:
+  poddiscipline[{{id_disciplina}}] = []
+  % end
+  % for id_poddisciplina, poddisciplina, id_disciplina in poddiscipline:
+  poddiscipline[{{id_disciplina}}].push([{{id_poddisciplina}}, {{!repr(poddisciplina)}}])
+  % end
+
+  function getPoddiscipline() {
+      disciplina = document.getElementById('id_disciplina');
+      value_disciplina = disciplina.options[disciplina.selectedIndex].value;
+      poddisciplina = document.getElementById('id_poddisciplina');
+      while (poddisciplina.firstChild) {
+        poddisciplina.removeChild(poddisciplina.lastChild)
+      }
+      option = document.createElement("option");
+      option.value = ""
+      option.text = "Izberi poddisciplino"
+      option.selected = true
+      poddisciplina.add(option)
+      if (!value_disciplina) {
+        return;
+      }
+      poddiscipline[value_disciplina].forEach(function (item, idx) {
+        option = document.createElement("option");
+        option.value = item[0]
+        option.text = item[1]
+        poddisciplina.add(option)
+      });
+  }
+
+  $(document).ready(getPoddiscipline);
+</script>
