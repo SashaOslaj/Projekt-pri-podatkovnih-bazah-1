@@ -178,6 +178,19 @@ def uredi_post():
 def autocomplete_athletes():
     query = request.query.get("query", "")
     return json.dumps({"suggestions": [{"value": tekmovalec.ime, "data": tekmovalec.id}
-                                       for tekmovalec in model.Tekmovalec.poisci_po_imenu(query, limit=20)]})
+                                       for tekmovalec in model.Tekmovalec.poisci_po_imenu(query, limit=10)]})
+
+@get('/autocomplete/disciplina')
+def autocomplete_disciplina():
+    query = request.query.get("query", "")
+    return json.dumps({"suggestions": [{"value": disciplina.disciplina}
+                                       for disciplina in model.Discipline.poisci_po_imenu(query, limit=10)]})
+
+@get('/autocomplete/poddisciplina')
+def autocomplete_poddisciplina():
+    query = request.query.get("query", "")
+    return json.dumps({"suggestions": [{"value": poddisciplina.poddisciplina}
+                                       for poddisciplina in model.Poddiscipline.poisci_po_imenu(query, limit=10)]})
+
 
 run(host='localhost', port=8080, reloader=True, debug=True)

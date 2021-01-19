@@ -17,10 +17,26 @@
           <input type="drzava" id="drzava" class="form-control" placeholder="Drzava, kratica" name="drzava" required>
           <label for="leto" class="sr-only">Navedi leto in drzavo olimpijskih iger</label>
           <input type="leto" id="leto" class="form-control" placeholder="Leto, drzava, kratica(drzave)" name="leto" required>
-          <label for="disciplina" class="sr-only">Navedi disciplino, v kateri je nastopil tekmovalec</label>
-          <input type="disciplina" id="disciplina" class="form-control" placeholder="Disciplina" name="disciplina" required>
-          <label for="poddisciplina" class="sr-only">Navedi poddisciplino, v kateri je nastopil tekmovalec</label>
-          <input type="poddisciplina" id="poddisciplina" class="form-control" placeholder="Poddisciplina" name="poddisciplina" required>
+          <label for="autocompleteDisciplina" class="sr-only">Navedi disciplino, v kateri je nastopil tekmovalec</label>
+          <input type="text" id="autocompleteDisciplina" class="form-control" placeholder="Disciplina" name="disciplina" required>
+          <script type="text/javascript">
+            $('#autocompleteDisciplina').autocomplete({
+              serviceUrl: '/autocomplete/disciplina',
+              onSelect: function (suggestion) {
+                suggestion.value;
+              }
+            });
+          </script>
+          <label for="autocompletePoddisciplina" class="sr-only">Navedi poddisciplino, v kateri je nastopil tekmovalec</label>
+          <input type="text" id="autocompletePoddisciplina" class="form-control" placeholder="Poddisciplina" name="poddisciplina" required>
+          <script type="text/javascript">
+            $('#autocompletePoddisciplina').autocomplete({
+              serviceUrl: '/autocomplete/poddisciplina',
+              onSelect: function (suggestion) {
+                suggestion.value;
+              }
+            });
+          </script>
           <label for="mesto" class="sr-only">Navedi, na katerem mestu je bil tekmovalec</label>
           <input type="mesto" id="mesto" class="form-control" placeholder="Mesto" name="mesto" required>
           <label for="rezultat" class="sr-only">Navedi, kakšen rezultat je dosegel tekmovalec</label>

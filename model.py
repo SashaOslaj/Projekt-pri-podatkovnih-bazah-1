@@ -115,11 +115,17 @@ class Leta:
 
 class Discipline:
 
-    def __init__(self, disciplina=None):
+    def __init__(self, disciplina=None, id=None):
         self.disciplina = disciplina
+        self.id = id
 
     def __str__(self):
         return self.disciplina
+
+    @staticmethod
+    def poisci_sql(sql, podatki=None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Discipline(*poizvedba)
 
     @staticmethod
     def pridobi_vse_discipline():
@@ -130,15 +136,42 @@ class Discipline:
         for poizvedba in poizvedbe:
             yield poizvedba
 
+    @staticmethod
+    def poisci_po_imenu(ime, limit=None):
+        sql = '''
+            SELECT ime FROM disciplina
+            WHERE ime LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Discipline.poisci_sql(sql, podatki)
+
 
 class Poddiscipline:
 
-    def __init__(self, disciplina=None, poddisciplina=None):
+    def __init__(self, poddisciplina=None, disciplina=None):
         self.disciplina = disciplina
         self.poddisciplina = poddisciplina
 
     def __str__(self):
         return self.poddisciplina
+
+    @staticmethod
+    def poisci_sql(sql, podatki=None):
+        for poizvedba in conn.execute(sql, podatki):
+            yield Poddiscipline(*poizvedba)
+
+    @staticmethod
+    def poisci_po_imenu(ime, limit=None):
+        sql = '''
+                SELECT ime FROM poddisciplina
+                WHERE ime LIKE ?'''
+        podatki = ['%' + ime + '%']
+        if limit:
+            sql += ' LIMIT ?'
+            podatki.append(limit)
+        yield from Poddiscipline.poisci_sql(sql, podatki)
 
     @staticmethod
     def pridobi_vse_poddiscipline():
